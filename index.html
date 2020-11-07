@@ -26,8 +26,108 @@
                 document.getElementById("rules-content").setAttribute("hidden","true")
                 document.getElementById("names-content").removeAttribute("hidden")
             }
+            
+            //BlackJack Lite
+            var wins= 0;
+            var losses = 0;
+            var draws = 0;
+            var thingy = 0;
+            var deck = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,10,10,10,10,10,10,10,10];
+            var player_hand = new Array(5);
+            var dealer_hand = new Array(5);
+            var rng = (Math.floor(Math.random *(deck.length)))
+            function blackjackWinCheck(){
+                let player_hand_total = 0;
+                let dealer_hand_total = 0;
+                let i;
+                for (i = 0; i <= player_hand.length; i++) {
+                    player_hand_total = player_hand_total + player_hand[i];
+                }
+                for (i = 0; i <= dealer_hand.length; i++) {
+                    player_hand_total = player_hand_total + player_hand[i];
+                }
+                if(player_hand_total > 21 || (player_hand_total<dealer_hand_total && dealer_hand_total<22)){
+                    blackjackPlayerLoss();
+                }
+                if(player_hand_total = 21 || (player_hand_total>dealer_hand_total && player_hand_total<22)){
+                    blackjackPlayerWin();
+                }
+                if(player_hand_total=dealer_hand_total && player_hand_total < 22){
+                    blackjackPlayerDraw();
+                }
+            }
+            function blackjackDrawCard(card_hand,card_deck){
+                rng = (Math.floor(Math.random *(deck.length)));
+                var i;
+                for (i = 0; i <= card_hand.length; i++) {
+                    if(card_hand[i] != null){
+                        card_hand[i] = card_deck[rng]
+                        card_deck = card_deck.splice(rng,1);
+                    }
+                }
+            }
+            function blackjackStart(){
+                deck = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,10,10,10,10,10,10,10,10];
+                player_hand = new Array(5);
+                dealer_hand = new Array(5);
+                rng = (Math.floor(Math.random *(deck.length)));
+                blackjackDrawCard(player_hand,deck);
+                blackjackDrawCard(player_hand,deck);
+                blackjackDrawCard(dealer_hand,deck);
+                blackjackDrawCard(dealer_hand,deck);
+                document.getElementById("player_hand").innerHTML = ""+player_hand[0]+""+player_hand[1]+""+player_hand[2]+""+player_hand[3]+""+player_hand[4]+"";
+                document.getElementById("dealer_hand").innerHTML = ""+dealer_hand[0]+""+dealer_hand[1]+""+dealer_hand[2]+""+dealer_hand[3]+""+dealer_hand[4]+"";
+            }
+            function runBlackJackInterface(){
+                openInterface();
+                document.getElementById("blackjack-content").removeAttribute("hidden")
+                //document.getElementById("blackjack").setAttribute("hidden","true")
+            }
+            //Niko Action Figure Gallery
+            function runNikoActionFigureGallery(){
+                openInterface();
+                document.getElementById("nikoactionfiguregallery-content").removeAttribute("hidden")
+            }
+            //Secrets Root
+            var commandNumbersWMS = 0;
+            var commandNumbersDiscord = 0;
+            var commandNumbersNikoActionFigureGallery = 0;
+            function hideInterfaces(){
+                document.getElementById("surface-stuff").removeAttribute("hidden")
+                document.getElementById("secret-stuff").setAttribute("hidden","true")
+                document.getElementById("blackjack-content").setAttribute("hidden","true")
+                document.getElementById("nikoactionfiguregallery-content").setAttribute("hidden","true")
+            }
+            function openInterface(){
+                document.getElementById("surface-stuff").setAttribute("hidden","true")
+                document.getElementById("secret-stuff").removeAttribute("hidden")
+            }
+            function addWMS(){
+                commandNumbersWMS = commandNumbersWMS + 1;
+            }
+            function addDiscord(){
+                commandNumbersDiscord = commandNumbersDiscord + 1;
+            }
+            function checkCommandNumbers(){
+                if(commandNumbersWMS == 6 && commandNumbersDiscord == 9){
+                    runBlackJackInterface();
+                }
+                commandNumbersWMS = 0;
+                commandNumbersDiscord = 0;
+            }
+            function addNikoActionFigureGallery(){
+                commandNumbersNikoActionFigureGallery = commandNumbersNikoActionFigureGallery + 1;
+            }
+            function checkNikoActionFigureGallery(){
+                if(commandNumbersNikoActionFigureGallery == 15){
+                    runNikoActionFigureGallery();
+                }
+                commandNumbersNikoActionFigureGallery = 0;
+            }
+            //Window.Onload
             window.onload = function(){
                 home();
+                hideInterfaces();
             }
         </script>
     </div>
@@ -87,6 +187,41 @@
             display:block;
             color:lightcyan;
         }
+        .blackjack-button{
+            display:block;
+            border:5px solid darkblue;
+            background-image: radial-gradient(darkseagreen,cadetblue);
+            color:white;
+            font-size:25px;
+            width:180px;
+            height:30px;
+            user-select:none;
+            text-align: center;
+        }
+        .blackjack-button:hover{
+            display:block;
+            border:5px solid darkblue;
+            outline:3px solid darkseagreen;
+            background-image: radial-gradient(darkseagreen,cadetblue);
+            color:white;
+            font-size:25px;
+            width:180px;
+            height:30px;
+            user-select:none;
+            text-align: center;
+        }
+        .blackjack-button:active{
+            display:block;
+            border:5px solid darkseagreen;
+            outline:3px solid darkblue;
+            background-image: radial-gradient(darkblue,cadetblue);
+            color:white;
+            font-size:25px;
+            width:180px;
+            height:30px;
+            user-select:none;
+            text-align: center;
+        }
     </style>
 <head>
   <meta charset="utf-8">
@@ -94,67 +229,86 @@
   <title>WMS Discord</title>
 </head>
     <body>
-        <div class="header">
-            <img class="header_img" src="wms_logo.png"/>
-            <img class="header_img" width="90" height="90" src="discord_logo.png"/>
-            <h2 class="header_h2">Unofficial WMS Discord's Unofficial Website</h2>
+        <div id="surface-stuff">
+            <div class="header">
+                <img class="header_img" onclick="addWMS();" src="wms_logo.png"/>
+                <img class="header_img" onclick="addDiscord();" width="90" height="90" src="discord_logo.png"/>
+                <h2 class="header_h2">Unofficial WMS Discord's Unofficial Website</h2>
+            </div>
+            <ul>
+              <li><a id="home" class="" onclick="home();">Home</a></li>
+              <li><a id="rules" class="" onclick="rules();">Rules</a></li>
+              <li><a id="names" class="" onclick="names();">Name Directory</a></li>
+            </ul>
+            <div id="content">
+                <div id="home-content">
+                    <h2 onclick="checkCommandNumbers();" class="title">Welcome to the WMS Discord! We hope you have a nice stay here.</h2>
+                    <hr>
+                    <h2 class="title">Basic Information</h2>
+                    <h3 class="subtitle">Founder:</h3>
+                    <p class="content">Andrew Jaskewicz (Howie #5623)</p>
+                    <h3 class="subtitle">Administrators:</h3>
+                    <p class="content">Anderson Tran (anderson. #4900)<br>Michael Wang (Froggy67823 #1045)<br>Niko Micheludis (Niko.EXE #7570)<br>Clare Peng (Creampuff #9342)<br>Natalie Au (Nat &lt;3 #4113)</p>
+                </div>
+                <div id="rules-content">
+                    <h2 class="title">WMS Discord Rules: Read 'em and Follow 'em</h2>
+                    <hr>
+                    <h3 class="subtitle1">Rule 1: DO NOT post NSFW and/or closely related items.</h3>
+                    <h3 class="subtitle2">Rule 2: DO NOT use racisms or sexualisms.</h3>
+                    <h3 class="subtitle1">Rule 3: If Given a Warning > No Arguing Back as You Were Given The Warning Due To You Breaking The Rules, you ARE allowed to ask for an explanation why.</h3>
+                    <h3 class="subtitle2">Rule 4: Absolutely No Harrassment.</h3>
+                    <h3 class="subtitle1">Rule 5: No Advertising unless approved.</h3>
+                    <h3 class="subtitle2">Rule 6: Breaking Discord ToS will get you banned.</h3>
+                    <h3 class="subtitle1">Rule 7: Absolutely no death threats or talking about suicidal matters. About the suicidal matters: Please tell your parents/guardians and teachers and try to get help as soon as possible</h3>
+                    <h3 class="subtitle2">Rule 8: No illegal activity Such as Malware and 3rd party Malware.</h3>
+                    <h3 class="subtitle1">Rule 9: Absolutely No Doxxing In This Server. Doxxing is a release of personal/private information without permission.</h3>
+                    <h3 class="subtitle2">Rule 10: No Arguing, Arguing In This Server With or Not With Administration Will Result In a Mute and If Continued Will Result In a Ban.</h3>
+                    <h3 class="subtitle1">Rule 11: No Disrespecting Administration as That Will Result In a Ban from the server.</h3>
+                    <h3 class="subtitle2">Rule 12: We Do Not Accept any Form of Toxicity Whether it'd be through dms or in this server, you will be subject to a ban.</h3>
+                    <h3 class="subtitle1">Rule 13: No Intentional Annoyance As in mass mentions, spam, ghost pinging, mass flooding, spoilers,etc.</h3>
+                    <h3 class="subtitle2">Rule 14: No Racial Slur as That Can Get You Banned Due To Offensiveness of Members And The Fact is, Nobody should be saying it all in the first place.</h3>
+                    <h3 class="subtitle1">Rule 15: Try to minimize use of vulgar language, links, or attachments as people mayget offended.</h3>
+                </div>
+                <div id="names-content">
+                    <h2 class="title">WMS Discord Name Directory: Use this to connect the Username with the Real Name</h2>
+                    <hr>
+                    <h3 class="subtitle1">AmongUs_Imposter#7841 = Mitchell Simon</h3>
+                    <h3 class="subtitle2">anderson.#4900 = Anderson Tran</h3>
+                    <h3 class="subtitle1">anthony p#9163 = Anthony Polumbo</h3>
+                    <h3 class="subtitle2">Arugood#9438 = Aryaman Gupta</h3>
+                    <h3 class="subtitle1">Balakay26#8033 = Blake Duddy</h3>
+                    <h3 class="subtitle2">dustypup#9061 = Ava Micheludis</h3>
+                    <h3 class="subtitle1">Froggy67823#1045 = Michael Wang</h3>
+                    <h3 class="subtitle2">Henry James;)#3105 = Andrew Jaskewicz</h3>
+                    <h3 class="subtitle1">Howie.#5623 = Andrew Jaskewicz</h3>
+                    <h3 class="subtitle2">LemonSteak#9649 = Advaith Busa</h3>
+                    <h3 class="subtitle1">MemeofTsushima#2863 = Kamau Venson</h3>
+                    <h3 class="subtitle2">Nat &lt;3#4113 = Natalee Au</h3>
+                    <h3 class="subtitle1" onclick="addNikoActionFigureGallery();">Niko.EXE#7570 = Niko Micheludis</h3>
+                    <h3 class="subtitle2">RiceDoggo#5877 = Olivia Nogan</h3>
+                    <h3 class="subtitle1">Creampuff#9342 = Clare Peng</h3>
+                    <h3 class="subtitle2">ThatMemer#5724 = Nick Santos</h3>
+                    <h3 class="subtitle1" onclick="checkNikoActionFigureGallery();">Wechillman#6129 = Andrew Jaskewicz</h3>
+                    <h3 class="subtitle2"></h3>
+                    <h3 class="subtitle1"></h3>
+                </div>
+            </div>
         </div>
-        <ul>
-          <li><a id="home" class="" onclick="home();">Home</a></li>
-          <li><a id="rules" class="" onclick="rules();">Rules</a></li>
-          <li><a id="names" class="" onclick="names();">Name Directory</a></li>
-        </ul>
-        <div id="content">
-            <div id="home-content">
-                <h2 class="title">Welcome to the WMS Discord! We hope you have a nice stay here.</h2>
-                <hr>
-                <h2 class="title">Basic Information</h2>
-                <h3 class="subtitle">Founder:</h3>
-                <p class="content">Andrew Jaskewicz (Howie #5623)</p>
-                <h3 class="subtitle">Administrators:</h3>
-                <p class="content">Anderson Tran (anderson. #4900)<br>Michael Wang (Froggy67823 #1045)<br>Niko Micheludis (Niko.EXE #7570)<br>Clare Peng (Creampuff #9342)</p>
+        <div id="secret-stuff">
+            <div id="blackjack-content">
+                <h3 id="player_hand"></h3>
+                <h3 id="dealer_hand"></h3>
+                <h3 id="blackjack-start" class="blackjack-button" onclick="blackjackStart();">START</h3>
+                <h3 id="blackjack-playagain" class="blackjack-button" onclick="blackjackStart();">PLAY AGAIN</h3>
+                <h3 id="blackjack-hit" class="blackjack-button" onclick="blackjackHit();">HIT</h3>
+                <h3 id="blackjack-stand" class="blackjack-button" onclick="blackjackStand();">STAND</h3>
+                <h3 id="blackjack-quit" class="blackjack-button" onclick="window.onload();">QUIT</h3>
             </div>
-            <div id="rules-content">
-                <h2 class="title">WMS Discord Rules: Read 'em and Follow 'em</h2>
-                <hr>
-                <h3 class="subtitle1">Rule 1: DO NOT post NSFW and/or closely related items.</h3>
-                <h3 class="subtitle2">Rule 2: DO NOT use racisms or sexualisms.</h3>
-                <h3 class="subtitle1">Rule 3: If Given a Warning > No Arguing Back as You Were Given The Warning Due To You Breaking The Rules, you ARE allowed to ask for an explanation why.</h3>
-                <h3 class="subtitle2">Rule 4: Absolutely No Harrassment.</h3>
-                <h3 class="subtitle1">Rule 5: No Advertising unless approved.</h3>
-                <h3 class="subtitle2">Rule 6: Breaking Discord ToS will get you banned.</h3>
-                <h3 class="subtitle1">Rule 7: Absolutely no death threats or talking about suicidal matters. About the suicidal matters: Please tell your parents/guardians and teachers and try to get help as soon as possible</h3>
-                <h3 class="subtitle2">Rule 8: No illegal activity Such as Malware and 3rd party Malware.</h3>
-                <h3 class="subtitle1">Rule 9: Absolutely No Doxxing In This Server. Doxxing is a release of personal/private information without permission.</h3>
-                <h3 class="subtitle2">Rule 10: No Arguing, Arguing In This Server With or Not With Administration Will Result In a Mute and If Continued Will Result In a Ban.</h3>
-                <h3 class="subtitle1">Rule 11: No Disrespecting Administration as That Will Result In a Ban from the server.</h3>
-                <h3 class="subtitle2">Rule 12: We Do Not Accept any Form of Toxicity Whether it'd be through dms or in this server, you will be subject to a ban.</h3>
-                <h3 class="subtitle1">Rule 13: No Intentional Annoyance As in mass mentions, spam, ghost pinging, mass flooding, spoilers,etc.</h3>
-                <h3 class="subtitle2">Rule 14: No Racial Slur as That Can Get You Banned Due To Offensiveness of Members And The Fact is, Nobody should be saying it all in the first place.</h3>
-                <h3 class="subtitle1">Rule 15: Try to minimize use of vulgar language, links, or attachments as people mayget offended.</h3>
-            </div>
-            <div id="names-content">
-                <h2 class="title">WMS Discord Name Directory: Use this to connect the Username with the Real Name</h2>
-                <hr>
-                <h3 class="subtitle1">AmongUs_Imposter#7841 = Mitchell Simon</h3>
-                <h3 class="subtitle2">anderson.#4900 = Anderson Tran</h3>
-                <h3 class="subtitle1">anthony p#9163 = Anthony Polumbo</h3>
-                <h3 class="subtitle2">Arugood#9438 = Aryaman Gupta</h3>
-                <h3 class="subtitle1">Balakay26#8033 = Blake Duddy</h3>
-                <h3 class="subtitle2">dustypup#9061 = Ava Micheludis</h3>
-                <h3 class="subtitle1">Froggy67823#1045 = Michael Wang</h3>
-                <h3 class="subtitle2">Henry James;)#3105 = Andrew Jaskewicz</h3>
-                <h3 class="subtitle1">Howie.#5623 = Andrew Jaskewicz</h3>
-                <h3 class="subtitle2">LemonSteak#9649 = Advaith Busa</h3>
-                <h3 class="subtitle1">MemeofTsushima#2863 = Kamau Venson</h3>
-                <h3 class="subtitle2">Nat &lt;3#4113 = Natalee Kingman</h3>
-                <h3 class="subtitle1">Niko.EXE#7570 = Niko Micheludis</h3>
-                <h3 class="subtitle2">RiceDoggo#5877 = Olivia Nogan</h3>
-                <h3 class="subtitle1">Creampuff#9342 = Clare Peng</h3>
-                <h3 class="subtitle2">ThatMemer#5724 = Nick Santos</h3>
-                <h3 class="subtitle1">Wechillman#6129 = Andrew Jaskewicz</h3>
-                <h3 class="subtitle2"></h3>
-                <h3 class="subtitle1"></h3>
+            <div id="nikoactionfiguregallery-content">
+                <h3 id="nikoactionfiguregallery-quit" class="blackjack-button" onclick="window.onload();">BACK</h3>
+                <img width="320" height="240" src="nikoactionfiguregallery-1.jpg"/>
+                <img width="320" height="240" src="nikoactionfiguregallery-2.jpg"/>
+                <img width="320" height="240" src="nikoactionfiguregallery-3.jpg"/>
             </div>
         </div>
     </body>
