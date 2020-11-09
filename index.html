@@ -85,9 +85,246 @@
             }
             //Niko Action Figure Gallery
             function runNikoActionFigureGallery(){
+                document.getElementById("website-title").innerHTML = "Action Figure Gallery"
                 openInterface();
                 document.getElementById("nikoactionfiguregallery-content").removeAttribute("hidden")
             }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            //Pusheen Clicker
+            var pusheenclickerworkerinterval;
+            var pusheenCount = 0;
+            var pusheenCountFormatted = "";
+            var clickPower = 1;
+            var clickMultiplier = 1;
+            var generalMultiplier = 1;
+            var unicornpusheenMultiplier = 1;
+            var prestigeMultiplier = 1;
+            
+            var catsMultiplier = 1;
+            var merchandiseMultiplier = 1;
+            var cartoonistMultiplier = 1;
+            
+            var catsBaseCost = 100;
+            var merchandiseBaseCost = 1000;
+            var cartoonistBaseCost = 10000;
+            var workerCostMultiplier = 0.212554215431674;
+            var upgradeCostMultiplier = 4.12039471873624791273;
+            
+            var catsAmount = 0;
+            var merchandiseAmount = 0;
+            var cartoonistAmount = 0;
+            
+            var catsBasePower = 1;
+            var merchandiseBasePower = 10;
+            var cartoonistBasePower = 100;
+            
+            var purchaseAmount = 1;
+            var pusheenClickerRunningCheck = false;
+            
+            var catsCost = Math.round(((catsAmount*workerCostMultiplier)*catsBaseCost)+catsBaseCost);
+            var merchandiseCost = Math.round(((merchandiseAmount*workerCostMultiplier)*merchandiseBaseCost)+merchandiseBaseCost);
+            var cartoonistCost = Math.round(((cartoonistAmount*workerCostMultiplier)*cartoonistBaseCost)+cartoonistBaseCost);
+            
+            var clickUpgradeAmount = 0;
+            var catsUpgradeAmount = 0;
+            var merchandiseUpgradeAmount = 0;
+            var cartoonistUpgradeAmount = 0;
+            
+            var clickUpgradeCost = Math.round(((clickUpgradeAmount*upgradeCostMultiplier)*(20/2))+(20/2));
+            var catsUpgradeCost = Math.round(((catsUpgradeAmount*upgradeCostMultiplier)*(catsBaseCost/2))+(catsBaseCost/2));
+            var merchandiseUpgradeCost = Math.round(((merchandiseUpgradeAmount*upgradeCostMultiplier)*(merchandiseBaseCost/2))+(merchandiseBaseCost/2));
+            var cartoonistUpgradeCost = Math.round(((cartoonistUpgradeAmount*upgradeCostMultiplier)*(cartoonistBaseCost/2))+(cartoonistBaseCost/2));
+            
+            
+            var catsPower = Math.round(catsAmount*catsBasePower*(catsMultiplier*(2**catsUpgradeAmount)));
+            var merchandisePower = Math.round(merchandiseAmount*merchandiseBasePower*(merchandiseMultiplier*(2**merchandiseUpgradeAmount)));
+            var cartoonistPower = Math.round(cartoonistAmount*cartoonistBasePower*(cartoonistMultiplier*(2**cartoonistUpgradeAmount)));
+            function runPusheenClicker(){
+                openInterface();
+                document.getElementById("website-title").innerHTML = "Pusheen Clicker"
+                document.getElementById("pusheenclicker-content").removeAttribute("hidden")
+                document.body.style.backgroundColor = "#ffb8ce";
+                pusheenCountFormatted = numberFormatter(pusheenCount);
+                document.getElementById("pusheen-count").innerHTML = pusheenCountFormatted+"<br>Pusheens";
+                pusheenClickerRunningCheck = true;
+                pusheenclickerupdaterinterval = setInterval(Updater,1);
+                Updater();
+                pusheenclickerworkerinterval = setInterval(RunWorkers,1000);
+                RunWorkers();
+            }
+            function pusheenClick(){
+                pusheenCount= pusheenCount + (clickPower*(clickMultiplier*(2**clickUpgradeAmount))*generalMultiplier*prestigeMultiplier);
+                pusheenCountFormatted = numberFormatter(pusheenCount);
+                document.getElementById("pusheen-count").innerHTML = pusheenCountFormatted+"<br>Pusheens";
+            }
+            function pusheenShopButtonActive(id,image){
+                document.getElementById(id+"-image").setAttribute("src",image+"_Shop_Button_Active.png")
+                document.getElementById(id+"-amount").style.color = "white";
+                document.getElementById(id+"-cost").style.color = "white";
+            }
+            function pusheenShopButtonInactive(id,image){
+                document.getElementById(id+"-image").setAttribute("src",image+"_Shop_Button.png")
+                document.getElementById(id+"-amount").style.color = "black";
+                document.getElementById(id+"-cost").style.color = "black";
+            }
+            function pusheenUpgradeButtonActive(id){
+                document.getElementById("generalshop-"+id+"-multiplier").setAttribute("src",id+"_PowerUpgrade_Active.png")
+            }
+            function pusheenUpgradeButtonInactive(id,image){
+                document.getElementById("generalshop-"+id+"-multiplier").setAttribute("src",id+"_PowerUpgrade.png")
+            }
+            function numberFormatter(num){     
+                if(num > 10**3-1 && num < 10**6){
+                    return (num/10**3).toFixed(3) + 'k';
+                }
+                else if(num > 10**6-1 && num < 10**9){
+                    return (num/10**6).toFixed(3) + 'm';
+                }
+                else if(num > 10**9-1 && num < 10**12){
+                    return (num/10**9).toFixed(3) + 't';
+                }
+                else if(num > 10**12-1 && num < 10**15){
+                    return (num/10**12).toFixed(3) + 'q';
+                }
+                else if(num > 10**15-1 && num < 10**18){
+                    return (num/10**15).toFixed(3) + 'Q';
+                }
+                else if(num > 10**18-1 && num < 10**21){
+                    return (num/10**18).toFixed(3) + 'h';
+                }
+                else if(num > 10**21-1 && num < 10**24){
+                    return (num/10**21).toFixed(3) + 's';
+                }
+                else if(num > 10**21-1 && num < 10**24){
+                    return (num/10**21).toFixed(3) + 'o';
+                }
+                else if(num > 10**21-1 && num < 10**24){
+                    return (num/10**21).toFixed(3) + 'n';
+                }
+                else if(num > 10**21-1 && num < 10**24){
+                    return (num/10**21).toFixed(3) + 'd';
+                }
+                else if(num > 10**21-1 && num < 10**24){
+                    return (num/10**21).toFixed(3) + 'u';
+                }
+                else if(num > 10**21-1 && num < 10**24){
+                    return (num/10**21).toFixed(3) + 'dd';
+                }
+                else if(num < 10**3){
+                    return num;
+                }
+            }
+            function pusheenShopInfoWindow(workertype){
+                if(workertype == 'cats'){
+                    document.getElementById("pusheenclicker-infowindow-name").innerHTML = 'Cats';
+                    document.getElementById("pusheenclicker-infowindow-cost").innerHTML = 'Cost:'+numberFormatter(catsCost);
+                    document.getElementById("pusheenclicker-infowindow-description").innerHTML = 'Adopt a cat to help you on your journey to get more Pusheens';
+                }
+                else if(workertype == 'merchandise'){
+                    document.getElementById("pusheenclicker-infowindow-name").innerHTML = 'Pusheen Merchandise';
+                    document.getElementById("pusheenclicker-infowindow-cost").innerHTML = 'Cost:'+numberFormatter(merchandiseCost);
+                    document.getElementById("pusheenclicker-infowindow-description").innerHTML = 'Make Pusheen merchandise to help spread Pusheen around';
+                }
+                else if(workertype == 'cartoonist'){
+                    document.getElementById("pusheenclicker-infowindow-name").innerHTML = 'Cartoonist';
+                    document.getElementById("pusheenclicker-infowindow-cost").innerHTML = 'Cost:'+numberFormatter(cartoonistCost);
+                    document.getElementById("pusheenclicker-infowindow-description").innerHTML = 'Hire a cartoonist to draw Pusheens for you';
+                }
+                else if(workertype == 'click_upgrade'){
+                    document.getElementById("pusheenclicker-infowindow-name").innerHTML = 'Click Upgrade';
+                    document.getElementById("pusheenclicker-infowindow-cost").innerHTML = 'Click Power:'+numberFormatter(clickPower*(clickMultiplier*(2**clickUpgradeAmount)))+'<br>Cost:'+numberFormatter(clickUpgradeCost);
+                    document.getElementById("pusheenclicker-infowindow-description").innerHTML = "Double your Click Power";
+                }
+                else if(workertype == 'cats_upgrade'){
+                    document.getElementById("pusheenclicker-infowindow-name").innerHTML = 'Cats Upgrade';
+                    document.getElementById("pusheenclicker-infowindow-cost").innerHTML = 'Current Power:'+numberFormatter(catsBasePower*(catsMultiplier*(2**catsUpgradeAmount)))+'<br>Cost:'+numberFormatter(catsUpgradeCost);
+                    document.getElementById("pusheenclicker-infowindow-description").innerHTML = "Double your Cats' Power";
+                }
+                else if(workertype == 'merchandise_upgrade'){
+                    document.getElementById("pusheenclicker-infowindow-name").innerHTML = 'Pusheen Merchandise Upgrade';
+                    document.getElementById("pusheenclicker-infowindow-cost").innerHTML = 'Current Power:'+numberFormatter(merchandiseBasePower*(merchandiseMultiplier*(2**merchandiseUpgradeAmount)))+'<br>Cost:'+numberFormatter(merchandiseUpgradeCost);
+                    document.getElementById("pusheenclicker-infowindow-description").innerHTML = "Double your Merchandise Manufacturing Power";
+                }
+                else if(workertype == 'cartoonist_upgrade'){
+                    document.getElementById("pusheenclicker-infowindow-name").innerHTML = 'Cartoonist Upgrade';
+                    document.getElementById("pusheenclicker-infowindow-cost").innerHTML = 'Current Power:'+numberFormatter(cartoonistBasePower*(cartoonistMultiplier*(2**cartoonistUpgradeAmount)))+'<br>Cost:'+numberFormatter(cartoonistUpgradeCost);
+                    document.getElementById("pusheenclicker-infowindow-description").innerHTML = "Double your Cartoonists' Power";
+                }
+            }
+            function RunWorkers(){
+                pusheenCount = pusheenCount + catsPower + merchandisePower + cartoonistPower;
+            }
+            function Updater(){
+                catsPower = Math.round(catsAmount*catsBasePower*(catsMultiplier*(2**catsUpgradeAmount)));
+                merchandisePower = Math.round(merchandiseAmount*merchandiseBasePower*(merchandiseMultiplier*(2**merchandiseUpgradeAmount)));
+                cartoonistPower = Math.round(cartoonistAmount*cartoonistBasePower*(cartoonistMultiplier*(2**cartoonistUpgradeAmount)));
+                clickUpgradeCost = Math.round(((clickUpgradeAmount*upgradeCostMultiplier)*(20/2))+(20/2));
+                catsUpgradeCost = Math.round(((catsUpgradeAmount*upgradeCostMultiplier)*(catsBaseCost/2))+(catsBaseCost/2));
+                merchandiseUpgradeCost = Math.round(((merchandiseUpgradeAmount*upgradeCostMultiplier)*(merchandiseBaseCost/2))+(merchandiseBaseCost/2));
+                cartoonistUpgradeCost = Math.round(((cartoonistUpgradeAmount*upgradeCostMultiplier)*(cartoonistBaseCost/2))+(cartoonistBaseCost/2));
+                pusheenCountFormatted = numberFormatter(pusheenCount);
+                document.getElementById("pusheen-count").innerHTML = pusheenCountFormatted+"<br>Pusheens";
+                document.getElementById("cats-amount").innerHTML = numberFormatter(catsAmount);
+                document.getElementById("merchandise-amount").innerHTML = numberFormatter(merchandiseAmount);
+                document.getElementById("cartoonist-amount").innerHTML = numberFormatter(cartoonistAmount);
+                catsCost = Math.round(((catsAmount*workerCostMultiplier)*catsBaseCost)+catsBaseCost);
+                merchandiseCost = Math.round(((merchandiseAmount*workerCostMultiplier)*merchandiseBaseCost)+merchandiseBaseCost);
+                cartoonistCost = Math.round(((cartoonistAmount*workerCostMultiplier)*cartoonistBaseCost)+cartoonistBaseCost);
+                document.getElementById("cats-cost").innerHTML = 'Cost:'+numberFormatter(catsCost);
+                document.getElementById("merchandise-cost").innerHTML = 'Cost:'+numberFormatter(merchandiseCost);
+                document.getElementById("cartoonist-cost").innerHTML = 'Cost:'+numberFormatter(cartoonistCost);
+            }
+            function newWorker(workertype){
+                if(workertype=="cats" && pusheenCount >= catsCost){
+                    pusheenCount = pusheenCount - catsCost;
+                   catsAmount = catsAmount + purchaseAmount;
+                }
+                else if(workertype=="merchandise" && pusheenCount >= merchandiseCost){
+                    pusheenCount = pusheenCount - merchandiseCost;
+                   merchandiseAmount = merchandiseAmount + purchaseAmount;
+                }
+                else if(workertype=="cartoonist" && pusheenCount >= cartoonistCost){
+                    pusheenCount = pusheenCount - cartoonistCost;
+                   cartoonistAmount = cartoonistAmount + purchaseAmount;
+                }
+            }
+            function workerUpgrades(workertype){
+                if(workertype=="click" && pusheenCount >= clickUpgradeCost){
+                   pusheenCount= pusheenCount - clickUpgradeCost;
+                    clickUpgradeAmount = clickUpgradeAmount + purchaseAmount;
+                }
+                else if(workertype=="cats" && pusheenCount >= catsUpgradeCost){
+                    pusheenCount = pusheenCount - catsUpgradeCost;
+                   catsUpgradeAmount = catsUpgradeAmount + purchaseAmount;
+                }
+                else if(workertype=="merchandise" && pusheenCount >= merchandiseUpgradeCost){
+                    pusheenCount = pusheenCount - merchandiseUpgradeCost;
+                   merchandiseUpgradeAmount = merchandiseUpgradeAmount + purchaseAmount;
+                }
+                else if(workertype=="cartoonist" && pusheenCount >= cartoonistUpgradeCost){
+                    pusheenCount = pusheenCount - cartoonistUpgradeCost;
+                   cartoonistUpgradeAmount = cartoonistUpgradeAmount + purchaseAmount;
+                }
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             //Secrets Root
             var commandNumbersWMS = 0;
             var commandNumbersDiscord = 0;
@@ -97,6 +334,10 @@
                 document.getElementById("secret-stuff").setAttribute("hidden","true")
                 document.getElementById("blackjack-content").setAttribute("hidden","true")
                 document.getElementById("nikoactionfiguregallery-content").setAttribute("hidden","true")
+                document.getElementById("pusheenclicker-content").setAttribute("hidden","true")
+                clearInterval(pusheenclickerworkerinterval)
+                clearInterval(pusheenclickerupdaterinterval)
+                pusheenClickerRunningCheck = false;
             }
             function openInterface(){
                 document.getElementById("surface-stuff").setAttribute("hidden","true")
@@ -112,6 +353,9 @@
                 if(commandNumbersWMS == 6 && commandNumbersDiscord == 9){
                     runBlackJackInterface();
                 }
+                if(commandNumbersWMS == 2 && commandNumbersDiscord == 4){
+                    runPusheenClicker();
+                }
                 commandNumbersWMS = 0;
                 commandNumbersDiscord = 0;
             }
@@ -126,6 +370,7 @@
             }
             //Window.Onload
             window.onload = function(){
+                document.getElementById("website-title").innerHTML = "WMS Discord"
                 home();
                 hideInterfaces();
             }
@@ -134,8 +379,18 @@
     <style>
         body{
             background-color: #99a1ff;
+            margin: 0;
         }
-        ul {
+        #content{
+            padding:20px;
+        }
+        #blackjack-content{
+            padding: 20px;
+        }
+        #nikoactionfiguregallery-content{
+            padding: 20px;
+        }
+        .wms-discord-navbar-ul {
           list-style-type: none;
           margin: 0;
           padding: 0;
@@ -143,11 +398,11 @@
           background-color: #0010c4;
         }
 
-        li {
+        .wms-discord-navbar-li {
           float: left;
         }
 
-        li a {
+        .wms-discord-navbar-li a {
           display: block;
           color: white;
           text-align: center;
@@ -156,7 +411,7 @@
             user-select:none;
         }
 
-        li a:hover {
+        .wms-discord-navbar-li a:hover {
           background-color: #000a7d;
         }
         .header_h2{
@@ -166,6 +421,15 @@
             text-align: center;
             width:500px;
             height:75px;
+            font:20px;
+        }
+        .pusheenclicker-header_h2{
+            float:left;
+            display:block;
+            color:white;
+            text-align: center;
+            width:500px;
+            height:50px;
             font:20px;
         }
         .active {
@@ -187,7 +451,7 @@
             display:block;
             color:lightcyan;
         }
-        .blackjack-button{
+        .secret-button{
             display:block;
             border:5px solid darkblue;
             background-image: radial-gradient(darkseagreen,cadetblue);
@@ -198,7 +462,7 @@
             user-select:none;
             text-align: center;
         }
-        .blackjack-button:hover{
+        .secret-button:hover{
             display:block;
             border:5px solid darkblue;
             outline:3px solid darkseagreen;
@@ -210,7 +474,7 @@
             user-select:none;
             text-align: center;
         }
-        .blackjack-button:active{
+        .secret-button:active{
             display:block;
             border:5px solid darkseagreen;
             outline:3px solid darkblue;
@@ -222,11 +486,233 @@
             user-select:none;
             text-align: center;
         }
+        #pusheenclicker-infrastructure{
+            position:absolute;
+            width:100%;
+            z-index: 5;
+        }
+        #pusheenclicker-content{
+            padding:0px;
+            user-select: none;
+        }
+        #pusheenclicker-header {
+            padding: 10px;
+            background: #ff9cbb;
+            color: white;
+            font-size: 20px;
+        }
+        .pusheenclickernav-ul {
+            list-style-type: none;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+          background-color: #ff85ac;
+        }
+
+        .pusheenclickernav-li {
+          float: left;
+        }
+
+        .pusheenclickernav-li a {
+          display: block;
+          color: white;
+          text-align: center;
+          padding: 14px 16px;
+          text-decoration: none;
+            user-select:none;
+        }
+
+        .pusheenclickernav-li a:hover {
+          background-color: #ff548b;
+        }
+        #falling-pusheens{
+            z-index: 0;
+        }
+        #fallingpusheen1{
+            position:absolute;
+            animation-name:pusheen-fall-anim;
+            animation-duration: 5s;
+            animation-delay:-4s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite
+        }
+        #fallingpusheen2{
+            left:50px;
+            position:absolute;
+            animation-name:pusheen-fall-anim2;
+            animation-duration: 4s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite
+        }
+        #fallingpusheen3{
+            left:100px;
+            position:absolute;
+            animation-name:pusheen-fall-anim;
+            animation-duration: 6s;
+            animation-delay:-2s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite
+        }
+        #fallingpusheen4{
+            left:150px;
+            position:absolute;
+            animation-name:pusheen-fall-anim3;
+            animation-duration: 3s;
+            animation-delay:-1s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite
+        }
+        #fallingpusheen5{
+            left:200px;
+            position:absolute;
+            animation-name:pusheen-fall-anim3;
+            animation-duration: 3s;
+            animation-delay:1s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite
+        }
+        #fallingpusheen6{
+            left:250px;
+            position:absolute;
+            animation-name:pusheen-fall-anim2;
+            animation-duration: 4s;
+            animation-delay:3s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite
+        }
+        #clickablepusheen{
+            top:200px;
+            left:75px;
+            width:240px;
+            height:240px;
+            position: absolute;
+           z-index: 4;
+            transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s;
+        }
+        #clickablepusheen:active{
+            top:210px;
+            left:85px;
+            width:220px;
+            height:220px;
+        }
+        #pusheen-count{
+            display:block;
+            position: absolute;
+            top:400px;
+            text-align: center;
+            left:85px;
+            width:200px;
+            height:50px;
+            font-size:20px;
+            background-color: cornsilk;
+        }
+        #workers{
+            margin-top:353px;
+            float:right;
+            position: relative;
+            height: 256px;
+            width: 256px;
+            overflow:  auto;
+            user-select: none;
+        }
+        #Cat{
+            position:absolute;
+            left:0px;
+            top:0px;
+        }
+        .amount{
+            position:absolute;
+            left:105px;
+            bottom:30px;
+        }
+        .cost{
+            position:absolute;
+            left:105px;
+            bottom:50px;
+        }
+        #Merchandise{
+            width:240px;
+            height:100px;
+            position:absolute;
+            left:0px;
+            top:100px;
+        }
+        #Cartoonists{
+            width:240px;
+            height:100px;
+            position:absolute;
+            left:0px;
+            top:200px;
+        }
+        #pusheenclicker-infowindow{
+            display:block;
+            width:256px;
+            height:183px;
+            background-color:black;
+            color:white;
+            position:absolute;
+            left:1024px;
+            top:170px;
+            opacity:0.8;
+        }
+        #pusheenclicker-infowindow-cost{
+            font-size:20px;
+        }
+        #pusheenclicker-infowindow-description{
+            font-size:15px;
+        }
+        #center-area{
+            left:360px;
+            top:170px;
+            position:absolute;
+            height: 436px;
+            width: 660px;
+            overflow:auto;
+            color:white;
+            background-image:url('shop_background.png');
+            background-repeat:repeat;
+            border:2px solid brown;
+        }
+        #worker-upgrades-title{
+            text-align:center;
+        }
+        @keyframes pusheen-fall-anim{
+            0%   {top: 0%;}
+            25%  {transform: rotate(135deg);}
+            50%  {transform: rotate(270deg);}
+            75%  {transform: rotate(405deg);}
+            100% {top: 75%;transform: rotate(540deg);opacity:0;}
+        }
+        @keyframes pusheen-fall-anim2{
+            0%   {top: 0%;}
+            25%  {transform: rotate(-135deg);}
+            50%  {transform: rotate(-270deg);}
+            75%  {transform: rotate(-405deg);}
+            100% {top: 75%;transform: rotate(-540deg);opacity:0;}
+        }
+        @keyframes pusheen-fall-anim3{
+            0%   {top: 0%;}
+            25%  {transform: rotate(90deg);}
+            50%  {transform: rotate(180deg);}
+            75%  {transform: rotate(270deg);}
+            100% {top: 74%;transform: rotate(360deg);opacity:0;}
+        }
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background-color:whitesmoke;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color:grey;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+        }
     </style>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>WMS Discord</title>
+  <title id="website-title"></title>
 </head>
     <body>
         <div id="surface-stuff">
@@ -235,10 +721,10 @@
                 <img class="header_img" onclick="addDiscord();" width="90" height="90" src="discord_logo.png"/>
                 <h2 class="header_h2">Unofficial WMS Discord's Unofficial Website</h2>
             </div>
-            <ul>
-              <li><a id="home" class="" onclick="home();">Home</a></li>
-              <li><a id="rules" class="" onclick="rules();">Rules</a></li>
-              <li><a id="names" class="" onclick="names();">Name Directory</a></li>
+            <ul class="wms-discord-navbar-ul">
+              <li class="wms-discord-navbar-li"><a id="home" class="" onclick="home();">Home</a></li>
+              <li class="wms-discord-navbar-li"><a id="rules" class="" onclick="rules();">Rules</a></li>
+              <li class="wms-discord-navbar-li"><a id="names" class="" onclick="names();">Name Directory</a></li>
             </ul>
             <div id="content">
                 <div id="home-content">
@@ -298,19 +784,85 @@
             <div id="blackjack-content">
                 <h3 id="player_hand"></h3>
                 <h3 id="dealer_hand"></h3>
-                <h3 id="blackjack-start" class="blackjack-button" onclick="blackjackStart();">START</h3>
-                <h3 id="blackjack-playagain" class="blackjack-button" onclick="blackjackStart();">PLAY AGAIN</h3>
-                <h3 id="blackjack-hit" class="blackjack-button" onclick="blackjackHit();">HIT</h3>
-                <h3 id="blackjack-stand" class="blackjack-button" onclick="blackjackStand();">STAND</h3>
-                <h3 id="blackjack-quit" class="blackjack-button" onclick="window.onload();">QUIT</h3>
+                <h3 id="blackjack-start" class="secret-button" onclick="blackjackStart();">START</h3>
+                <h3 id="blackjack-playagain" class="secret-button" onclick="blackjackStart();">PLAY AGAIN</h3>
+                <h3 id="blackjack-hit" class="secret-button" onclick="blackjackHit();">HIT</h3>
+                <h3 id="blackjack-stand" class="secret-button" onclick="blackjackStand();">STAND</h3>
+                <h3 id="blackjack-quit" class="secret-button" onclick="window.onload();">QUIT</h3>
             </div>
             <div id="nikoactionfiguregallery-content">
-                <h3 id="nikoactionfiguregallery-quit" class="blackjack-button" onclick="window.onload();">BACK</h3>
+                <h3 id="nikoactionfiguregallery-quit" class="secret-button" onclick="window.onload();">BACK</h3>
                 <h2>Welcome to Niko's Action Figure Gallery!</h2>
                 <hr>
                 <img width="320" height="240" src="nikoactionfiguregallery-1.jpg"/>
                 <img width="320" height="240" src="nikoactionfiguregallery-2.jpg"/>
                 <img width="320" height="240" src="nikoactionfiguregallery-3.jpg"/>
+            </div>
+            <div ondragstart="return false" id="pusheenclicker-content">
+                <div id="pusheenclicker-infrastructure">
+                    <div id="pusheenclicker-header">
+                        <h2 class="pusheenclicker-header_h2">The Pusheen Clicker</h2>
+                        <img id="header_pusheen" width="100" height="100" src="Pusheen.png"/>
+                    </div>
+                    <ul class="pusheenclickernav-ul">
+                        <li class="pusheenclickernav-li"><a id="pusheenclicker-home" class="" onclick="pusheenclickerHome();">Home</a></li>
+                        <li class="pusheenclickernav-li"><a id="pusheenclicker-shop" class="" onclick="pusheenclickerShop();">Shop</a></li>
+                        <li class="pusheenclickernav-li"><a id="pusheenclicker-prestige" class="" onclick="pusheenclickerPrestige();">Prestige</a></li>
+                    </ul>
+                </div>
+                <div id="click-area">
+                    <div id="falling-pusheens">
+                        <img id="fallingpusheen1" width="100" height="100" src="Pusheen.png"/>
+                        <img id="fallingpusheen2" width="120" height="120" src="Pusheen.png"/>
+                        <img id="fallingpusheen3" width="100" height="100" src="Pusheen.png"/>
+                        <img id="fallingpusheen4" width="100" height="100" src="Pusheen.png"/>
+                        <img id="fallingpusheen5" width="130" height="130" src="Pusheen.png"/>
+                        <img id="fallingpusheen6" width="120" height="120" src="Pusheen.png"/>
+                    </div>
+                    <div id="clickable-pusheen">
+                        <img onclick="pusheenClick();" id="clickablepusheen" src="Pusheen.png"/>
+                        <h2 id="pusheen-count"></h2>
+                    </div>
+                </div>
+                <div id="center-area">
+                    <div id="centerarea-container">
+                        <div id="general-shop">
+                            <div id="worker-upgrades">
+                                <h2 id="worker-upgrades-title">==+Upgrades+==</h2>
+                                <img id="generalshop-click-multiplier"onmouseover="pusheenShopInfoWindow('click_upgrade');" onmousedown="pusheenUpgradeButtonActive('click');" onmouseup="pusheenUpgradeButtonInactive('click');"onclick="workerUpgrades('click');"src="click_PowerUpgrade.png"/>
+                                <img id="generalshop-cats-multiplier"onmouseover="pusheenShopInfoWindow('cats_upgrade');" onmousedown="pusheenUpgradeButtonActive('cats');" onmouseup="pusheenUpgradeButtonInactive('cats');"onclick="workerUpgrades('cats');"src="cats_PowerUpgrade.png"/>
+                                <img id="generalshop-merchandise-multiplier"onmouseover="pusheenShopInfoWindow('merchandise_upgrade');" onmousedown="pusheenUpgradeButtonActive('merchandise');" onmouseup="pusheenUpgradeButtonInactive('merchandise');"onclick="workerUpgrades('merchandise');"src="merchandise_PowerUpgrade.png"/>
+                                <img id="generalshop-cartoonist-multiplier"onmouseover="pusheenShopInfoWindow('cartoonist_upgrade');" onmousedown="pusheenUpgradeButtonActive('cartoonist');" onmouseup="pusheenUpgradeButtonInactive('cartoonist');"onclick="workerUpgrades('cartoonist');"src="cartoonist_PowerUpgrade.png"/>
+                            </div>
+                        </div>
+                        <div id="prestige-shop">
+                        </div>
+                    </div>
+                </div>
+                <div id="worker-shop">
+                    <div id="pusheenclicker-infowindow">
+                        <h2 id="pusheenclicker-infowindow-name"></h2>
+                        <h2 id="pusheenclicker-infowindow-cost"></h2>
+                        <h2 id="pusheenclicker-infowindow-description"></h2>
+                    </div>
+                    <div id="workers">
+                        <div onmouseover="pusheenShopInfoWindow('cats');" onmousedown="pusheenShopButtonActive('cats','Cats');" onmouseup="pusheenShopButtonInactive('cats','Cats');" id="Cat">
+                            <img id="cats-image" onclick="newWorker('cats');" src="Cats_Shop_Button.png"/>
+                            <h2 id="cats-amount" class="amount"></h2>
+                            <h3 id="cats-cost" class="cost"></h3>
+                        </div>
+                        <div onmouseover="pusheenShopInfoWindow('merchandise');" onmousedown="pusheenShopButtonActive('merchandise','Merchandise');" onmouseup="pusheenShopButtonInactive('merchandise','Merchandise');" id="Merchandise">
+                            <img id="merchandise-image" onclick="newWorker('merchandise');" src="Merchandise_Shop_Button.png"/>
+                            <h2 id="merchandise-amount" class="amount"></h2>
+                            <h3 id="merchandise-cost" class="cost"></h3>
+                        </div>
+                        <div onmouseover="pusheenShopInfoWindow('cartoonist');" onmousedown="pusheenShopButtonActive('cartoonist','Cartoonists');" onmouseup="pusheenShopButtonInactive('cartoonist','Cartoonists');" id="Cartoonists">
+                            <img id="cartoonist-image" onclick="newWorker('cartoonist');" src="Cartoonists_Shop_Button.png"/>
+                            <h2 id="cartoonist-amount" class="amount"></h2>
+                            <h3 id="cartoonist-cost" class="cost"></h3>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </body>
