@@ -116,7 +116,7 @@
             var merchandiseBaseCost = 1000;
             var cartoonistBaseCost = 10000;
             var workerCostMultiplier = 0.212554215431674;
-            var upgradeCostMultiplier = 4.12039471873624791273;
+            var upgradeCostMultiplier = 5.12039471873624791273;
             
             var catsAmount = 0;
             var merchandiseAmount = 0;
@@ -138,10 +138,10 @@
             var merchandiseUpgradeAmount = 0;
             var cartoonistUpgradeAmount = 0;
             
-            var clickUpgradeCost = Math.round(((clickUpgradeAmount*upgradeCostMultiplier)*(20/2))+(20/2));
-            var catsUpgradeCost = Math.round(((catsUpgradeAmount*upgradeCostMultiplier)*(catsBaseCost/2))+(catsBaseCost/2));
-            var merchandiseUpgradeCost = Math.round(((merchandiseUpgradeAmount*upgradeCostMultiplier)*(merchandiseBaseCost/2))+(merchandiseBaseCost/2));
-            var cartoonistUpgradeCost = Math.round(((cartoonistUpgradeAmount*upgradeCostMultiplier)*(cartoonistBaseCost/2))+(cartoonistBaseCost/2));
+            var clickUpgradeCost = Math.round((((clickUpgradeAmount+1)**upgradeCostMultiplier)*(100/2))+(100/2));
+            var catsUpgradeCost = Math.round((((catsUpgradeAmount+1)**upgradeCostMultiplier)*(catsBaseCost/2))+(catsBaseCost/2));
+            var merchandiseUpgradeCost = Math.round((((merchandiseUpgradeAmount+1)**upgradeCostMultiplier)*(merchandiseBaseCost/2))+(merchandiseBaseCost/2));
+            var cartoonistUpgradeCost = Math.round((((cartoonistUpgradeAmount+1)**upgradeCostMultiplier)*(cartoonistBaseCost/2))+(cartoonistBaseCost/2));
             
             
             var catsPower = Math.round(catsAmount*catsBasePower*(catsMultiplier*(2**catsUpgradeAmount)));
@@ -266,10 +266,10 @@
                 catsPower = Math.round(catsAmount*catsBasePower*(catsMultiplier*(2**catsUpgradeAmount)));
                 merchandisePower = Math.round(merchandiseAmount*merchandiseBasePower*(merchandiseMultiplier*(2**merchandiseUpgradeAmount)));
                 cartoonistPower = Math.round(cartoonistAmount*cartoonistBasePower*(cartoonistMultiplier*(2**cartoonistUpgradeAmount)));
-                clickUpgradeCost = Math.round(((clickUpgradeAmount*upgradeCostMultiplier)*(20/2))+(20/2));
-                catsUpgradeCost = Math.round(((catsUpgradeAmount*upgradeCostMultiplier)*(catsBaseCost/2))+(catsBaseCost/2));
-                merchandiseUpgradeCost = Math.round(((merchandiseUpgradeAmount*upgradeCostMultiplier)*(merchandiseBaseCost/2))+(merchandiseBaseCost/2));
-                cartoonistUpgradeCost = Math.round(((cartoonistUpgradeAmount*upgradeCostMultiplier)*(cartoonistBaseCost/2))+(cartoonistBaseCost/2));
+                clickUpgradeCost = Math.round((((clickUpgradeAmount+1)**upgradeCostMultiplier)*(100/2))+(100/2));
+                catsUpgradeCost = Math.round((((catsUpgradeAmount+1)**upgradeCostMultiplier)*(catsBaseCost/2))+(catsBaseCost/2));
+                merchandiseUpgradeCost = Math.round((((merchandiseUpgradeAmount+1)**upgradeCostMultiplier)*(merchandiseBaseCost/2))+(merchandiseBaseCost/2));
+                cartoonistUpgradeCost = Math.round((((cartoonistUpgradeAmount+1)**upgradeCostMultiplier)*(cartoonistBaseCost/2))+(cartoonistBaseCost/2));
                 pusheenCountFormatted = numberFormatter(pusheenCount);
                 document.getElementById("pusheen-count").innerHTML = pusheenCountFormatted+"<br>Pusheens";
                 document.getElementById("cats-amount").innerHTML = numberFormatter(catsAmount);
@@ -428,9 +428,9 @@
             display:block;
             color:white;
             text-align: center;
-            width:500px;
-            height:50px;
-            font:20px;
+            width:30vw;
+            height:5vh;
+            font-size:5vmin;
         }
         .active {
             background-color: #4CAF50;
@@ -440,9 +440,6 @@
             background: #0012e0;
             color: white;
             font-size: 20px;
-        }
-        .header_img{
-            
         }
         .subtitle1{
             display:block;
@@ -492,14 +489,13 @@
             z-index: 5;
         }
         #pusheenclicker-content{
-            padding:0px;
+            padding:0;
             user-select: none;
         }
         #pusheenclicker-header {
-            padding: 10px;
+            padding: 0.75vw;
             background: #ff9cbb;
             color: white;
-            font-size: 20px;
         }
         .pusheenclickernav-ul {
             list-style-type: none;
@@ -507,6 +503,7 @@
           padding: 0;
           overflow: hidden;
           background-color: #ff85ac;
+            font-size:2.6vmin;
         }
 
         .pusheenclickernav-li {
@@ -517,7 +514,7 @@
           display: block;
           color: white;
           text-align: center;
-          padding: 14px 16px;
+          padding: 1.1vw 1.75vw;
           text-decoration: none;
             user-select:none;
         }
@@ -529,6 +526,8 @@
             z-index: 0;
         }
         #fallingpusheen1{
+            width:8vw;
+            height:16.5vh;
             position:absolute;
             animation-name:pusheen-fall-anim;
             animation-duration: 5s;
@@ -537,7 +536,9 @@
             animation-iteration-count: infinite
         }
         #fallingpusheen2{
-            left:50px;
+            width:9.6vw;
+            height:19.8vh;
+            left:4vw;
             position:absolute;
             animation-name:pusheen-fall-anim2;
             animation-duration: 4s;
@@ -545,7 +546,9 @@
             animation-iteration-count: infinite
         }
         #fallingpusheen3{
-            left:100px;
+            width:8vw;
+            height:16.5vh;
+            left:8vw;
             position:absolute;
             animation-name:pusheen-fall-anim;
             animation-duration: 6s;
@@ -554,7 +557,9 @@
             animation-iteration-count: infinite
         }
         #fallingpusheen4{
-            left:150px;
+            width:8vw;
+            height:16.5vh;
+            left:12vw;
             position:absolute;
             animation-name:pusheen-fall-anim3;
             animation-duration: 3s;
@@ -563,7 +568,9 @@
             animation-iteration-count: infinite
         }
         #fallingpusheen5{
-            left:200px;
+            width:10.4vw;
+            height:21.45vh;
+            left:16vw;
             position:absolute;
             animation-name:pusheen-fall-anim3;
             animation-duration: 3s;
@@ -572,7 +579,9 @@
             animation-iteration-count: infinite
         }
         #fallingpusheen6{
-            left:250px;
+            width:9.6vw;
+            height:19.8vh;
+            left:20vw;
             position:absolute;
             animation-name:pusheen-fall-anim2;
             animation-duration: 4s;
@@ -581,73 +590,82 @@
             animation-iteration-count: infinite
         }
         #clickablepusheen{
-            top:200px;
-            left:75px;
-            width:240px;
-            height:240px;
+            top:32vh;
+            left:5.75vw;
+            width:19.2vw;
+            height:39.6vh;
             position: absolute;
            z-index: 4;
             transition: width 0.5s, height 0.5s, top 0.5s, left 0.5s;
         }
         #clickablepusheen:active{
-            top:210px;
-            left:85px;
-            width:220px;
-            height:220px;
+            top:34vh;
+            left:6.5vw;
+            width:17.6vw;
+            height:36.3vh;
         }
         #pusheen-count{
             display:block;
             position: absolute;
-            top:400px;
+            top:65vh;
             text-align: center;
-            left:85px;
-            width:200px;
-            height:50px;
-            font-size:20px;
-            background-color: cornsilk;
+            left:7vw;
+            width:16vw;
+            height:9vh;
+            font-size:3.5vmin;
+            background:rgba(255, 255, 255, 0.8);
+            opacity:0.8;
         }
         #workers{
-            margin-top:353px;
+            margin-top:57.89vh;
             float:right;
             position: relative;
-            height: 256px;
-            width: 256px;
+            height: 41.95vh;
+            width: 20vw;
             overflow:  auto;
             user-select: none;
         }
+        #workers img{
+            width:18.75vw;
+            height:16.39vh;
+        }
+        .amount{
+            font-size:4vmin;
+            position:absolute;
+            left:7.5vw;
+            bottom:4.5vh;
+        }
+        .cost{
+            font-size:3vmin;
+            position:absolute;
+            left:7.5vw;
+            bottom:8vh;
+        }
         #Cat{
+            width:18.75vw;
+            height:16.39vh;
             position:absolute;
             left:0px;
             top:0px;
         }
-        .amount{
-            position:absolute;
-            left:105px;
-            bottom:30px;
-        }
-        .cost{
-            position:absolute;
-            left:105px;
-            bottom:50px;
-        }
         #Merchandise{
-            width:240px;
-            height:100px;
+            width:18.75vw;
+            height:16.39vh;
             position:absolute;
             left:0px;
-            top:100px;
+            top:16.482vh;
         }
         #Cartoonists{
-            width:240px;
-            height:100px;
+            width:18.75vw;
+            height:16.39vh;
             position:absolute;
             left:0px;
-            top:200px;
+            top:32.8vh;
         }
         #pusheenclicker-infowindow{
             display:block;
-            width:256px;
-            height:183px;
+            width:20vw;
+            height:30vh;
             background-color:black;
             color:white;
             position:absolute;
@@ -656,28 +674,37 @@
             opacity:0.8;
         }
         #pusheenclicker-infowindow-name{
-            font-size:20px;
+            font-size:3.5vmin;
         }
         #pusheenclicker-infowindow-cost{
-            font-size:18px;
+            font-size:2.5vmin;
         }
         #pusheenclicker-infowindow-description{
-            font-size:15px;
+            font-size:2vmin;
         }
         #center-area{
-            left:28.15%;
+            left:27.75%;
             top:27.9%;
             position:absolute;
-            height: 436px;
-            width: 660px;
+            height: 71.3vh;
+            width: 51.9vw;
             overflow:auto;
             color:white;
             background-image:url('shop_background.png');
             background-repeat:repeat;
-            border:2px solid brown;
+            border:0.2vw solid brown;
         }
         #worker-upgrades-title{
+            font-size:4vmin;
             text-align:center;
+        }
+        #worker-upgrades img{
+            width:8vw;
+            height:16.5vh;
+        }
+        #header_pusheen{
+            width:8vw;
+            height:16.5vh;
         }
         @keyframes pusheen-fall-anim{
             0%   {top: 0%;}
@@ -701,7 +728,7 @@
             100% {top: 74%;transform: rotate(360deg);opacity:0;}
         }
         ::-webkit-scrollbar {
-            width: 12px;
+            width: 1.2vw;
         }
         ::-webkit-scrollbar-track {
             background-color:whitesmoke;
@@ -714,7 +741,7 @@
     </style>
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title id="website-title"></title>
 </head>
     <body>
@@ -815,10 +842,10 @@
                 </div>
                 <div id="click-area">
                     <div id="falling-pusheens">
-                        <img id="fallingpusheen1" width="100" height="100" src="Pusheen.png"/>
+                        <img id="fallingpusheen1" src="Pusheen.png"/>
                         <img id="fallingpusheen2" width="120" height="120" src="Pusheen.png"/>
-                        <img id="fallingpusheen3" width="100" height="100" src="Pusheen.png"/>
-                        <img id="fallingpusheen4" width="100" height="100" src="Pusheen.png"/>
+                        <img id="fallingpusheen3" src="Pusheen.png"/>
+                        <img id="fallingpusheen4" src="Pusheen.png"/>
                         <img id="fallingpusheen5" width="130" height="130" src="Pusheen.png"/>
                         <img id="fallingpusheen6" width="120" height="120" src="Pusheen.png"/>
                     </div>
