@@ -314,7 +314,15 @@
                    cartoonistUpgradeAmount = cartoonistUpgradeAmount + purchaseAmount;
                 }
             }
-            
+            function pusheenclickerHome(){
+                document.getElementById("general-shop").setAttribute("hidden","true");
+                document.getElementById("pusheenclickercenter-home").removeAttribute("hidden");
+            }
+            function pusheenclickerShop(){
+                document.getElementById('pusheenclickercenter-home').setAttribute('hidden',"true");
+                document.getElementById("general-shop").removeAttribute("hidden");
+                
+            }
             
             
             
@@ -370,6 +378,7 @@
             }
             //Window.Onload
             window.onload = function(){
+                document.getElementById("general-shop").setAttribute("hidden","true");
                 document.getElementById("website-title").innerHTML = "WMS Discord"
                 home();
                 hideInterfaces();
@@ -706,6 +715,13 @@
             width:8vw;
             height:16.5vh;
         }
+        #center-area-title{
+            font-size:4vmin;
+            text-align:center;
+        }
+        #center-area-text{
+            font-size:2.5vmin;
+        }
         @keyframes pusheen-fall-anim{
             0%   {top: 0%;}
             25%  {transform: rotate(135deg);}
@@ -856,6 +872,47 @@
                 </div>
                 <div id="center-area">
                     <div id="centerarea-container">
+                        <div id="pusheenclickercenter-home">
+                            <h2 id="center-area-title">Welcome to the Pusheen Clicker!</h2>
+                            <h2 id="center-area-text">This is still a work progress. I know, it's bad but it's still in development so it MIGHT get better(it's not). But nonetheless, I hope you have a nice stay here.</h2>
+                            <h2 id="center-area-title">Development Roadmap</h2>
+                            <h2 id="center-area-text">Engine Rework(projected: 2 days?):<br>
+                                Convert workers into classes, clean up the javascript, make the code more flexible to changes and additions<br>
+                                Worker additions(projected: 1 days?):<br>
+                                Add more workers<br>
+                                Implement Research(projected:1/2 days?):<br>
+                                Add research tab with research projects that unlock more workers<br>
+                                Add DOGS(projected:2-3 days?):<br>
+                                add opposition force<br>
+                                Add All Planned Workers(projected:2-3 days?):<br>
+                                add ALL planned workers<br>
+                                Add Endings(projected:1-2days?):<br>
+                                add endings and story endings<br>
+                                Add extras and QoL(projected:multiplie days):<br>
+                                auto clickers, golden/unicorn pusheens, quality of life, bug fixes, general improvements<br>
+                            </h2>
+                            <h2 id="center-area-title">Credits</h2>
+                            <h2 id="center-area-text">
+                                CEO: Michael Wang<br>
+                                CTO: Michael Wang<br>
+                                CFO: Michael Wang<br>
+                                CIO: Michael Wang<br>
+                                COO: Michael Wang<br>
+                                CCO: Michael Wang<br>
+                                CKO: Michael Wang<br>
+                                CSO: Michael Wang<br>
+                                CDO: Michael Wang<br>
+                                CMO: Michael Wang<br>
+                                Lead Programmer: Michael Wang<br>
+                                Lead Game Design: Michael Wang<br>
+                                Lead Story Writer: Michael Wang<br>
+                                Lead Designer: Michael Wang<br>
+                                Lead Artist: Michael Wang<br>
+                                Lead Animator: Michael Wang<br>
+                                Lead Marketer: Michael Wang<br>
+                                That One Unpaid Intern: Darren Xu<br>
+                            </h2>
+                        </div>
                         <div id="general-shop">
                             <div id="worker-upgrades">
                                 <h2 id="worker-upgrades-title">==+Upgrades+==</h2>
