@@ -2,7 +2,7 @@
 <html>
     <div>
         <script>
-            function home(){
+            /*function home(){
                 document.getElementById("home").setAttribute("class","active")
                 document.getElementById("rules").setAttribute("class","")
                 document.getElementById("names").setAttribute("class","")
@@ -88,7 +88,7 @@
                 document.getElementById("website-title").innerHTML = "Action Figure Gallery"
                 openInterface();
                 document.getElementById("nikoactionfiguregallery-content").removeAttribute("hidden")
-            }
+            }*/
             
             
             
@@ -148,7 +148,7 @@
             var merchandisePower = Math.round(merchandiseAmount*merchandiseBasePower*(merchandiseMultiplier*(2**merchandiseUpgradeAmount)));
             var cartoonistPower = Math.round(cartoonistAmount*cartoonistBasePower*(cartoonistMultiplier*(2**cartoonistUpgradeAmount)));
             function runPusheenClicker(){
-                openInterface();
+                /*openInterface();*/
                 document.getElementById("website-title").innerHTML = "Pusheen Clicker"
                 document.getElementById("pusheenclicker-content").removeAttribute("hidden")
                 document.body.style.backgroundColor = "#ffb8ce";
@@ -334,7 +334,7 @@
             
             
             //Secrets Root
-            var commandNumbersWMS = 0;
+            /*var commandNumbersWMS = 0;
             var commandNumbersDiscord = 0;
             var commandNumbersNikoActionFigureGallery = 0;
             function hideInterfaces(){
@@ -375,13 +375,14 @@
                     runNikoActionFigureGallery();
                 }
                 commandNumbersNikoActionFigureGallery = 0;
-            }
+            }*/
             //Window.Onload
             window.onload = function(){
+                runPusheenClicker();
                 document.getElementById("general-shop").setAttribute("hidden","true");
-                document.getElementById("website-title").innerHTML = "WMS Discord"
+                /*document.getElementById("website-title").innerHTML = "WMS Discord"
                 home();
-                hideInterfaces();
+                hideInterfaces();*/
             }
         </script>
     </div>
@@ -758,10 +759,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script data-ad-client="ca-pub-9835016556573506" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title id="website-title"></title>
 </head>
     <body>
-        <div id="surface-stuff">
+        <!--<div id="surface-stuff">
             <div class="header">
                 <img class="header_img" onclick="addWMS();" src="wms_logo.png"/>
                 <img class="header_img" onclick="addDiscord();" width="90" height="90" src="discord_logo.png"/>
@@ -825,9 +827,9 @@
                     <h3 class="subtitle1"></h3>
                 </div>
             </div>
-        </div>
+        </div>-->
         <div id="secret-stuff">
-            <div id="blackjack-content">
+            <!--<div id="blackjack-content">
                 <h3 id="player_hand"></h3>
                 <h3 id="dealer_hand"></h3>
                 <h3 id="blackjack-start" class="secret-button" onclick="blackjackStart();">START</h3>
@@ -843,7 +845,7 @@
                 <img width="320" height="240" src="nikoactionfiguregallery-1.jpg"/>
                 <img width="320" height="240" src="nikoactionfiguregallery-2.jpg"/>
                 <img width="320" height="240" src="nikoactionfiguregallery-3.jpg"/>
-            </div>
+            </div>-->
             <div ondragstart="return false" id="pusheenclicker-content">
                 <div id="pusheenclicker-infrastructure">
                     <div id="pusheenclicker-header">
