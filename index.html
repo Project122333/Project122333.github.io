@@ -100,53 +100,41 @@
             
             //Pusheen Clicker
             var pusheenclickerworkerinterval;
+            var pusheenclickerupdaterinterval;
             var pusheenCount = 0;
             var pusheenCountFormatted = "";
-            var clickPower = 1;
             var clickMultiplier = 1;
             var generalMultiplier = 1;
             var unicornpusheenMultiplier = 1;
             var prestigeMultiplier = 1;
-            
-            var catsMultiplier = 1;
-            var merchandiseMultiplier = 1;
-            var cartoonistMultiplier = 1;
-            
-            var catsBaseCost = 100;
-            var merchandiseBaseCost = 1000;
-            var cartoonistBaseCost = 10000;
-            var workerCostMultiplier = 0.212554215431674;
-            var upgradeCostMultiplier = 5.12039471873624791273;
-            
-            var catsAmount = 0;
-            var merchandiseAmount = 0;
-            var cartoonistAmount = 0;
-            
-            var catsBasePower = 1;
-            var merchandiseBasePower = 10;
-            var cartoonistBasePower = 100;
+            var workerCostMultiplier = 1.15;
+            var upgradeCostMultiplier = 7.63;
             
             var purchaseAmount = 1;
-            var pusheenClickerRunningCheck = false;
             
-            var catsCost = Math.round(((catsAmount*workerCostMultiplier)*catsBaseCost)+catsBaseCost);
-            var merchandiseCost = Math.round(((merchandiseAmount*workerCostMultiplier)*merchandiseBaseCost)+merchandiseBaseCost);
-            var cartoonistCost = Math.round(((cartoonistAmount*workerCostMultiplier)*cartoonistBaseCost)+cartoonistBaseCost);
+            class PusheenClickerWorker{
+                constructor(_name,_description,_basePower,_baseCost,_baseUpgradeCost,_powerMultiplier) {
+                    this.name = _name;
+                    this.description = _description;
+                    this.basePower = _basePower;
+                    this.baseCost = _baseCost;
+                    this.baseUpgradeCost = _baseUpgradeCost;
+                    this.powerMultiplier = _powerMultiplier;
+                    this.amount = 0;
+                    this.upgradeAmount = 0;
+                    this.cost=Math.round((workerCostMultiplier**this.amount)*this.baseCost);
+                    this.upgradeCost = Math.round((this.baseUpgradeCost)*upgradeCostMultiplier**this.upgradeAmount);
+                    this.power = (this.amount*this.basePower*(this.powerMultiplier*(2**this.upgradeAmount)));
+                    this.hidden = true;
+                }
+            }
             
-            var clickUpgradeAmount = 0;
-            var catsUpgradeAmount = 0;
-            var merchandiseUpgradeAmount = 0;
-            var cartoonistUpgradeAmount = 0;
+            var Click = new PusheenClickerWorker("Click","This is your almighty click",1,null,50,1);
+            var Cats = new PusheenClickerWorker("Cats","Adopt a cat to help you on your journey to get more Pusheens",1,100,100,1);
+            var Merchandise = new PusheenClickerWorker("Merchandise","Make Pusheen merchandise to help spread Pusheen around",10,1100,1000,1);
+            var Cartoonist = new PusheenClickerWorker("Cartoonist","Hire a cartoonist to draw Pusheens for you",100,12000,7500,1);
+            var WorkerList = [Cats,Merchandise,Cartoonist];
             
-            var clickUpgradeCost = Math.round((((clickUpgradeAmount+1)**upgradeCostMultiplier)*(100/2))+(100/2));
-            var catsUpgradeCost = Math.round((((catsUpgradeAmount+1)**upgradeCostMultiplier)*(catsBaseCost/2))+(catsBaseCost/2));
-            var merchandiseUpgradeCost = Math.round((((merchandiseUpgradeAmount+1)**upgradeCostMultiplier)*(merchandiseBaseCost/2))+(merchandiseBaseCost/2));
-            var cartoonistUpgradeCost = Math.round((((cartoonistUpgradeAmount+1)**upgradeCostMultiplier)*(cartoonistBaseCost/2))+(cartoonistBaseCost/2));
-            
-            
-            var catsPower = Math.round(catsAmount*catsBasePower*(catsMultiplier*(2**catsUpgradeAmount)));
-            var merchandisePower = Math.round(merchandiseAmount*merchandiseBasePower*(merchandiseMultiplier*(2**merchandiseUpgradeAmount)));
-            var cartoonistPower = Math.round(cartoonistAmount*cartoonistBasePower*(cartoonistMultiplier*(2**cartoonistUpgradeAmount)));
             function runPusheenClicker(){
                 /*openInterface();*/
                 document.getElementById("website-title").innerHTML = "Pusheen Clicker"
@@ -155,30 +143,59 @@
                 pusheenCountFormatted = numberFormatter(pusheenCount);
                 document.getElementById("pusheen-count").innerHTML = pusheenCountFormatted+"<br>Pusheens";
                 pusheenClickerRunningCheck = true;
+                var localstorage_pusheencount = localStorage.getItem("storage_pusheenCount");
+                if(typeof(localstorage_pusheencount)!=='undefined'){
+                    pusheenCount = parseInt(localstorage_pusheencount);
+                }else{
+                    pusheenCount=0;
+                }
+                var i;
+                for(i=0;i<WorkerList.length;i++){
+                    var j;
+                    var k;
+                    j = WorkerList[i].name;
+                    k = localStorage.getItem("storage_"+j+"_amount");
+                    if(typeof(k)!=='undefined'){
+                        WorkerList[i].amount = parseInt(k);
+                    }else{
+                        WorkerList[i].amount = 0;
+                    }
+                }
+                for(i=0;i<WorkerList.length;i++){
+                    var j;
+                    var k;
+                    j = WorkerList[i].name;
+                    k = localStorage.getItem("storage_"+j+"_upgradeamount");
+                    if(typeof(k)!=='undefined'){
+                        WorkerList[i].upgradeAmount = parseInt(k);
+                    }else{
+                        WorkerList[i].upgradeAmount = 0;
+                    }
+                }
                 pusheenclickerupdaterinterval = setInterval(Updater,1);
                 Updater();
                 pusheenclickerworkerinterval = setInterval(RunWorkers,1000);
                 RunWorkers();
             }
             function pusheenClick(){
-                pusheenCount= pusheenCount + (clickPower*(clickMultiplier*(2**clickUpgradeAmount))*generalMultiplier*prestigeMultiplier);
+                pusheenCount= pusheenCount + (Click.power*generalMultiplier*prestigeMultiplier*unicornpusheenMultiplier*clickMultiplier);
                 pusheenCountFormatted = numberFormatter(pusheenCount);
                 document.getElementById("pusheen-count").innerHTML = pusheenCountFormatted+"<br>Pusheens";
             }
-            function pusheenShopButtonActive(id,image){
-                document.getElementById(id+"-image").setAttribute("src",image+"_Shop_Button_Active.png")
+            function pusheenShopButtonActive(id){
+                document.getElementById(id+"-image").setAttribute("src",id+"_Shop_Button_Active.png")
                 document.getElementById(id+"-amount").style.color = "white";
                 document.getElementById(id+"-cost").style.color = "white";
             }
-            function pusheenShopButtonInactive(id,image){
-                document.getElementById(id+"-image").setAttribute("src",image+"_Shop_Button.png")
+            function pusheenShopButtonInactive(id){
+                document.getElementById(id+"-image").setAttribute("src",id+"_Shop_Button.png")
                 document.getElementById(id+"-amount").style.color = "black";
                 document.getElementById(id+"-cost").style.color = "black";
             }
             function pusheenUpgradeButtonActive(id){
                 document.getElementById("generalshop-"+id+"-multiplier").setAttribute("src",id+"_PowerUpgrade_Active.png")
             }
-            function pusheenUpgradeButtonInactive(id,image){
+            function pusheenUpgradeButtonInactive(id){
                 document.getElementById("generalshop-"+id+"-multiplier").setAttribute("src",id+"_PowerUpgrade.png")
             }
             function numberFormatter(num){     
@@ -203,116 +220,77 @@
                 else if(num > 10**21-1 && num < 10**24){
                     return (num/10**21).toFixed(3) + 's';
                 }
-                else if(num > 10**21-1 && num < 10**24){
-                    return (num/10**21).toFixed(3) + 'o';
+                else if(num > 10**24-1 && num < 10**27){
+                    return (num/10**24).toFixed(3) + 'o';
                 }
-                else if(num > 10**21-1 && num < 10**24){
-                    return (num/10**21).toFixed(3) + 'n';
+                else if(num > 10**27-1 && num < 10**30){
+                    return (num/10**27).toFixed(3) + 'n';
                 }
-                else if(num > 10**21-1 && num < 10**24){
-                    return (num/10**21).toFixed(3) + 'd';
+                else if(num > 10**30-1 && num < 10**33){
+                    return (num/10**30).toFixed(3) + 'd';
                 }
-                else if(num > 10**21-1 && num < 10**24){
-                    return (num/10**21).toFixed(3) + 'u';
+                else if(num > 10**33-1 && num < 10**36){
+                    return (num/10**33).toFixed(3) + 'u';
                 }
-                else if(num > 10**21-1 && num < 10**24){
-                    return (num/10**21).toFixed(3) + 'dd';
+                else if(num > 10**36-1 && num < 10**39){
+                    return (num/10**36).toFixed(3) + 'dd';
                 }
                 else if(num < 10**3){
                     return num;
                 }
             }
-            function pusheenShopInfoWindow(workertype){
-                if(workertype == 'cats'){
-                    document.getElementById("pusheenclicker-infowindow-name").innerHTML = 'Cats';
-                    document.getElementById("pusheenclicker-infowindow-cost").innerHTML = 'Cost:'+numberFormatter(catsCost);
-                    document.getElementById("pusheenclicker-infowindow-description").innerHTML = 'Adopt a cat to help you on your journey to get more Pusheens';
+            function pusheenShopInfoWindow(workertype,type){
+                if(type=="worker"){
+                    document.getElementById("pusheenclicker-infowindow-name").innerHTML = workertype.name;
+                    document.getElementById("pusheenclicker-infowindow-cost").innerHTML = 'Cost:'+numberFormatter(workertype.cost);
+                    document.getElementById("pusheenclicker-infowindow-description").innerHTML = workertype.description;
                 }
-                else if(workertype == 'merchandise'){
-                    document.getElementById("pusheenclicker-infowindow-name").innerHTML = 'Pusheen Merchandise';
-                    document.getElementById("pusheenclicker-infowindow-cost").innerHTML = 'Cost:'+numberFormatter(merchandiseCost);
-                    document.getElementById("pusheenclicker-infowindow-description").innerHTML = 'Make Pusheen merchandise to help spread Pusheen around';
+                else if(type == 'upgrade'){
+                    document.getElementById("pusheenclicker-infowindow-name").innerHTML = workertype.name+' Upgrade';
+                    document.getElementById("pusheenclicker-infowindow-cost").innerHTML = workertype.name+' Power:'+numberFormatter(workertype.basePower*(workertype.powerMultiplier*(2**workertype.upgradeAmount)))+'<br>Cost:'+numberFormatter(workertype.upgradeCost);
+                    document.getElementById("pusheenclicker-infowindow-description").innerHTML = "Double "+workertype.name+" Power";
                 }
-                else if(workertype == 'cartoonist'){
-                    document.getElementById("pusheenclicker-infowindow-name").innerHTML = 'Cartoonist';
-                    document.getElementById("pusheenclicker-infowindow-cost").innerHTML = 'Cost:'+numberFormatter(cartoonistCost);
-                    document.getElementById("pusheenclicker-infowindow-description").innerHTML = 'Hire a cartoonist to draw Pusheens for you';
-                }
-                else if(workertype == 'click_upgrade'){
-                    document.getElementById("pusheenclicker-infowindow-name").innerHTML = 'Click Upgrade';
-                    document.getElementById("pusheenclicker-infowindow-cost").innerHTML = 'Click Power:'+numberFormatter(clickPower*(clickMultiplier*(2**clickUpgradeAmount)))+'<br>Cost:'+numberFormatter(clickUpgradeCost);
-                    document.getElementById("pusheenclicker-infowindow-description").innerHTML = "Double your Click Power";
-                }
-                else if(workertype == 'cats_upgrade'){
-                    document.getElementById("pusheenclicker-infowindow-name").innerHTML = 'Cats Upgrade';
-                    document.getElementById("pusheenclicker-infowindow-cost").innerHTML = 'Current Power:'+numberFormatter(catsBasePower*(catsMultiplier*(2**catsUpgradeAmount)))+'<br>Cost:'+numberFormatter(catsUpgradeCost);
-                    document.getElementById("pusheenclicker-infowindow-description").innerHTML = "Double your Cats' Power";
-                }
-                else if(workertype == 'merchandise_upgrade'){
-                    document.getElementById("pusheenclicker-infowindow-name").innerHTML = 'Pusheen Merchandise Upgrade';
-                    document.getElementById("pusheenclicker-infowindow-cost").innerHTML = 'Current Power:'+numberFormatter(merchandiseBasePower*(merchandiseMultiplier*(2**merchandiseUpgradeAmount)))+'<br>Cost:'+numberFormatter(merchandiseUpgradeCost);
-                    document.getElementById("pusheenclicker-infowindow-description").innerHTML = "Double your Merchandise Manufacturing Power";
-                }
-                else if(workertype == 'cartoonist_upgrade'){
-                    document.getElementById("pusheenclicker-infowindow-name").innerHTML = 'Cartoonist Upgrade';
-                    document.getElementById("pusheenclicker-infowindow-cost").innerHTML = 'Current Power:'+numberFormatter(cartoonistBasePower*(cartoonistMultiplier*(2**cartoonistUpgradeAmount)))+'<br>Cost:'+numberFormatter(cartoonistUpgradeCost);
-                    document.getElementById("pusheenclicker-infowindow-description").innerHTML = "Double your Cartoonists' Power";
-                }
+                else{return;}
             }
             function RunWorkers(){
-                pusheenCount = pusheenCount + catsPower + merchandisePower + cartoonistPower;
+                var i;
+                for(i=0;i<WorkerList.length;i++){
+                pusheenCount = pusheenCount + (WorkerList[i].power*generalMultiplier*prestigeMultiplier*unicornpusheenMultiplier);
+                }
             }
             function Updater(){
-                catsPower = Math.round(catsAmount*catsBasePower*(catsMultiplier*(2**catsUpgradeAmount)));
-                merchandisePower = Math.round(merchandiseAmount*merchandiseBasePower*(merchandiseMultiplier*(2**merchandiseUpgradeAmount)));
-                cartoonistPower = Math.round(cartoonistAmount*cartoonistBasePower*(cartoonistMultiplier*(2**cartoonistUpgradeAmount)));
-                clickUpgradeCost = Math.round((((clickUpgradeAmount+1)**upgradeCostMultiplier)*(100/2))+(100/2));
-                catsUpgradeCost = Math.round((((catsUpgradeAmount+1)**upgradeCostMultiplier)*(catsBaseCost/2))+(catsBaseCost/2));
-                merchandiseUpgradeCost = Math.round((((merchandiseUpgradeAmount+1)**upgradeCostMultiplier)*(merchandiseBaseCost/2))+(merchandiseBaseCost/2));
-                cartoonistUpgradeCost = Math.round((((cartoonistUpgradeAmount+1)**upgradeCostMultiplier)*(cartoonistBaseCost/2))+(cartoonistBaseCost/2));
+                Click.amount=1;
+                Click.upgradeCost = Math.round((Click.baseUpgradeCost)*upgradeCostMultiplier**Click.upgradeAmount);
+                Click.power=(Click.amount*Click.basePower*(Click.powerMultiplier*(2**Click.upgradeAmount)));
+                var i;
+                for(i=0;i<WorkerList.length;i++){ 
+                    WorkerList[i].cost=Math.round((workerCostMultiplier**WorkerList[i].amount)*WorkerList[i].baseCost);
+                    WorkerList[i].upgradeCost = Math.round((WorkerList[i].baseUpgradeCost)*upgradeCostMultiplier**WorkerList[i].upgradeAmount);
+                    WorkerList[i].power = (WorkerList[i].amount*WorkerList[i].basePower*(WorkerList[i].powerMultiplier*(2**WorkerList[i].upgradeAmount)));
+                document.getElementById(WorkerList[i].name+"-amount").innerHTML = numberFormatter(WorkerList[i].amount);
+                    document.getElementById(WorkerList[i].name+"-cost").innerHTML = numberFormatter(WorkerList[i].cost);
+                    localStorage.setItem("storage_"+WorkerList[i].name+"_amount",WorkerList[i].amount);
+                    localStorage.setItem("storage_"+WorkerList[i].name+"_upgradeamount",WorkerList[i].upgradeAmount);
+                
+                
+            }
+                localStorage.setItem("storage_pusheenCount",pusheenCount);
                 pusheenCountFormatted = numberFormatter(pusheenCount);
                 document.getElementById("pusheen-count").innerHTML = pusheenCountFormatted+"<br>Pusheens";
-                document.getElementById("cats-amount").innerHTML = numberFormatter(catsAmount);
-                document.getElementById("merchandise-amount").innerHTML = numberFormatter(merchandiseAmount);
-                document.getElementById("cartoonist-amount").innerHTML = numberFormatter(cartoonistAmount);
-                catsCost = Math.round(((catsAmount*workerCostMultiplier)*catsBaseCost)+catsBaseCost);
-                merchandiseCost = Math.round(((merchandiseAmount*workerCostMultiplier)*merchandiseBaseCost)+merchandiseBaseCost);
-                cartoonistCost = Math.round(((cartoonistAmount*workerCostMultiplier)*cartoonistBaseCost)+cartoonistBaseCost);
-                document.getElementById("cats-cost").innerHTML = 'Cost:'+numberFormatter(catsCost);
-                document.getElementById("merchandise-cost").innerHTML = 'Cost:'+numberFormatter(merchandiseCost);
-                document.getElementById("cartoonist-cost").innerHTML = 'Cost:'+numberFormatter(cartoonistCost);
             }
             function newWorker(workertype){
-                if(workertype=="cats" && pusheenCount >= catsCost){
-                    pusheenCount = pusheenCount - catsCost;
-                   catsAmount = catsAmount + purchaseAmount;
+                if(pusheenCount >= workertype.cost){
+                    pusheenCount = pusheenCount - workertype.cost;
+                   workertype.amount = workertype.amount + purchaseAmount;
                 }
-                else if(workertype=="merchandise" && pusheenCount >= merchandiseCost){
-                    pusheenCount = pusheenCount - merchandiseCost;
-                   merchandiseAmount = merchandiseAmount + purchaseAmount;
-                }
-                else if(workertype=="cartoonist" && pusheenCount >= cartoonistCost){
-                    pusheenCount = pusheenCount - cartoonistCost;
-                   cartoonistAmount = cartoonistAmount + purchaseAmount;
-                }
+                else{return;}
             }
             function workerUpgrades(workertype){
-                if(workertype=="click" && pusheenCount >= clickUpgradeCost){
-                   pusheenCount= pusheenCount - clickUpgradeCost;
-                    clickUpgradeAmount = clickUpgradeAmount + purchaseAmount;
+                if(pusheenCount >= workertype.upgradeCost){
+                    pusheenCount= pusheenCount - workertype.upgradeCost;
+                    workertype.upgradeAmount = workertype.upgradeAmount + purchaseAmount;
                 }
-                else if(workertype=="cats" && pusheenCount >= catsUpgradeCost){
-                    pusheenCount = pusheenCount - catsUpgradeCost;
-                   catsUpgradeAmount = catsUpgradeAmount + purchaseAmount;
-                }
-                else if(workertype=="merchandise" && pusheenCount >= merchandiseUpgradeCost){
-                    pusheenCount = pusheenCount - merchandiseUpgradeCost;
-                   merchandiseUpgradeAmount = merchandiseUpgradeAmount + purchaseAmount;
-                }
-                else if(workertype=="cartoonist" && pusheenCount >= cartoonistUpgradeCost){
-                    pusheenCount = pusheenCount - cartoonistUpgradeCost;
-                   cartoonistUpgradeAmount = cartoonistUpgradeAmount + purchaseAmount;
-                }
+                else{return;}
             }
             function pusheenclickerHome(){
                 document.getElementById("general-shop").setAttribute("hidden","true");
@@ -322,6 +300,21 @@
                 document.getElementById('pusheenclickercenter-home').setAttribute('hidden',"true");
                 document.getElementById("general-shop").removeAttribute("hidden");
                 
+            }
+            function pusheenclickerPROGRESSRESET1(){
+                var confirm_progress_reset = prompt('Are you sure you want to delete all of you progress and reset? If so, type "PUSHEENSUCKS" into the textbox:, Harry Potter');
+                if (confirm_progress_reset == "PUSHEENSUCKS") {
+                    pusheenclickerPROGRESSRESET2();
+                }
+            }
+            function pusheenclickerPROGRESSRESET2(){
+                var i;
+                for(i=0;i<WorkerList.length;i++){
+                    WorkerList[i].amount=0;
+                    WorkerList[i].upgradeAmount=0;
+                }
+                pusheenCount=0;
+                localStorage.clear();
             }
             
             
@@ -519,6 +512,19 @@
         .pusheenclickernav-li {
           float: left;
         }
+        .pusheenclickernav-li_right {
+          float: right;
+        }
+        .pusheenclickernav-li_right a {
+          display: block;
+          text-align: center;
+          padding: 1.1vw 1.75vw;
+          text-decoration: none;
+            user-select:none;
+        }
+        .pusheenclickernav-li_right a:hover {
+          background-color: #ff548b;
+        }
 
         .pusheenclickernav-li a {
           display: block;
@@ -665,7 +671,7 @@
             left:0px;
             top:16.4vh;
         }
-        #Cartoonists{
+        #Cartoonist{
             width:18.75vw;
             height:16.39vh;
             position:absolute;
@@ -722,6 +728,9 @@
         }
         #center-area-text{
             font-size:2.5vmin;
+        }
+        .text_red{
+            color:red;
         }
         @keyframes pusheen-fall-anim{
             0%   {top: 0%;}
@@ -848,15 +857,18 @@
             </div>-->
             <div ondragstart="return false" id="pusheenclicker-content">
                 <div id="pusheenclicker-infrastructure">
-                    <div id="pusheenclicker-header">
-                        <h2 class="pusheenclicker-header_h2">The Pusheen Clicker</h2>
-                        <img id="header_pusheen" width="100" height="100" src="Pusheen.png"/>
+                    <div>
+                        <div id="pusheenclicker-header">
+                            <h2 class="pusheenclicker-header_h2">The Pusheen Clicker</h2>
+                            <img id="header_pusheen" width="100" height="100" src="Pusheen.png"/>
+                        </div>
+                        <ul class="pusheenclickernav-ul">
+                            <li class="pusheenclickernav-li"><a id="pusheenclicker-home" class="" onclick="pusheenclickerHome();">Home</a></li>
+                            <li class="pusheenclickernav-li"><a id="pusheenclicker-shop" class="" onclick="pusheenclickerShop();">Shop</a></li>
+                            <li class="pusheenclickernav-li"><a id="pusheenclicker-prestige" class="" onclick="pusheenclickerPrestige();">Prestige</a></li>
+                            <li class="pusheenclickernav-li_right"><a id="pusheenclicker-prestige" class="text_red" onclick="pusheenclickerPROGRESSRESET1();">RESET</a></li>
+                        </ul>
                     </div>
-                    <ul class="pusheenclickernav-ul">
-                        <li class="pusheenclickernav-li"><a id="pusheenclicker-home" class="" onclick="pusheenclickerHome();">Home</a></li>
-                        <li class="pusheenclickernav-li"><a id="pusheenclicker-shop" class="" onclick="pusheenclickerShop();">Shop</a></li>
-                        <li class="pusheenclickernav-li"><a id="pusheenclicker-prestige" class="" onclick="pusheenclickerPrestige();">Prestige</a></li>
-                    </ul>
                 </div>
                 <div id="click-area">
                     <div id="falling-pusheens">
@@ -918,10 +930,10 @@
                         <div id="general-shop">
                             <div id="worker-upgrades">
                                 <h2 id="worker-upgrades-title">==+Upgrades+==</h2>
-                                <img id="generalshop-click-multiplier"onmouseover="pusheenShopInfoWindow('click_upgrade');" onmousedown="pusheenUpgradeButtonActive('click');" onmouseup="pusheenUpgradeButtonInactive('click');"onclick="workerUpgrades('click');"src="click_PowerUpgrade.png"/>
-                                <img id="generalshop-cats-multiplier"onmouseover="pusheenShopInfoWindow('cats_upgrade');" onmousedown="pusheenUpgradeButtonActive('cats');" onmouseup="pusheenUpgradeButtonInactive('cats');"onclick="workerUpgrades('cats');"src="cats_PowerUpgrade.png"/>
-                                <img id="generalshop-merchandise-multiplier"onmouseover="pusheenShopInfoWindow('merchandise_upgrade');" onmousedown="pusheenUpgradeButtonActive('merchandise');" onmouseup="pusheenUpgradeButtonInactive('merchandise');"onclick="workerUpgrades('merchandise');"src="merchandise_PowerUpgrade.png"/>
-                                <img id="generalshop-cartoonist-multiplier"onmouseover="pusheenShopInfoWindow('cartoonist_upgrade');" onmousedown="pusheenUpgradeButtonActive('cartoonist');" onmouseup="pusheenUpgradeButtonInactive('cartoonist');"onclick="workerUpgrades('cartoonist');"src="cartoonist_PowerUpgrade.png"/>
+                                <img id="generalshop-click-multiplier"onmouseover="pusheenShopInfoWindow(Click,'upgrade');" onmousedown="pusheenUpgradeButtonActive('click');" onmouseup="pusheenUpgradeButtonInactive('click');"onclick="workerUpgrades(Click);"src="click_PowerUpgrade.png"/>
+                                <img id="generalshop-cats-multiplier"onmouseover="pusheenShopInfoWindow(Cats,'upgrade');" onmousedown="pusheenUpgradeButtonActive('cats');" onmouseup="pusheenUpgradeButtonInactive('cats');"onclick="workerUpgrades(Cats);"src="cats_PowerUpgrade.png"/>
+                                <img id="generalshop-merchandise-multiplier"onmouseover="pusheenShopInfoWindow(Merchandise,'upgrade');" onmousedown="pusheenUpgradeButtonActive('merchandise');" onmouseup="pusheenUpgradeButtonInactive('merchandise');"onclick="workerUpgrades(Merchandise);"src="merchandise_PowerUpgrade.png"/>
+                                <img id="generalshop-cartoonist-multiplier"onmouseover="pusheenShopInfoWindow(Cartoonist,'upgrade');" onmousedown="pusheenUpgradeButtonActive('cartoonist');" onmouseup="pusheenUpgradeButtonInactive('cartoonist');"onclick="workerUpgrades(Cartoonist);"src="cartoonist_PowerUpgrade.png"/>
                             </div>
                         </div>
                         <div id="prestige-shop">
@@ -935,20 +947,20 @@
                         <h2 id="pusheenclicker-infowindow-description"></h2>
                     </div>
                     <div id="workers">
-                        <div onmouseover="pusheenShopInfoWindow('cats');" onmousedown="pusheenShopButtonActive('cats','Cats');" onmouseup="pusheenShopButtonInactive('cats','Cats');" id="Cat">
-                            <img id="cats-image" onclick="newWorker('cats');" src="Cats_Shop_Button.png"/>
-                            <h2 id="cats-amount" class="amount"></h2>
-                            <h3 id="cats-cost" class="cost"></h3>
+                        <div onmouseover="pusheenShopInfoWindow(Cats,'worker');" onmousedown="pusheenShopButtonActive('Cats');" onmouseup="pusheenShopButtonInactive('Cats');" id="Cat">
+                            <img id="Cats-image" onclick="newWorker(Cats);" src="Cats_Shop_Button.png"/>
+                            <h2 id="Cats-amount" class="amount"></h2>
+                            <h3 id="Cats-cost" class="cost"></h3>
                         </div>
-                        <div onmouseover="pusheenShopInfoWindow('merchandise');" onmousedown="pusheenShopButtonActive('merchandise','Merchandise');" onmouseup="pusheenShopButtonInactive('merchandise','Merchandise');" id="Merchandise">
-                            <img id="merchandise-image" onclick="newWorker('merchandise');" src="Merchandise_Shop_Button.png"/>
-                            <h2 id="merchandise-amount" class="amount"></h2>
-                            <h3 id="merchandise-cost" class="cost"></h3>
+                        <div onmouseover="pusheenShopInfoWindow(Merchandise,'worker');" onmousedown="pusheenShopButtonActive('Merchandise');" onmouseup="pusheenShopButtonInactive('Merchandise');" id="Merchandise">
+                            <img id="Merchandise-image" onclick="newWorker(Merchandise);" src="Merchandise_Shop_Button.png"/>
+                            <h2 id="Merchandise-amount" class="amount"></h2>
+                            <h3 id="Merchandise-cost" class="cost"></h3>
                         </div>
-                        <div onmouseover="pusheenShopInfoWindow('cartoonist');" onmousedown="pusheenShopButtonActive('cartoonist','Cartoonists');" onmouseup="pusheenShopButtonInactive('cartoonist','Cartoonists');" id="Cartoonists">
-                            <img id="cartoonist-image" onclick="newWorker('cartoonist');" src="Cartoonists_Shop_Button.png"/>
-                            <h2 id="cartoonist-amount" class="amount"></h2>
-                            <h3 id="cartoonist-cost" class="cost"></h3>
+                        <div onmouseover="pusheenShopInfoWindow(Cartoonist,'worker');" onmousedown="pusheenShopButtonActive('Cartoonist');" onmouseup="pusheenShopButtonInactive('Cartoonist');" id="Cartoonist">
+                            <img id="Cartoonist-image" onclick="newWorker(Cartoonist);" src="Cartoonist_Shop_Button.png"/>
+                            <h2 id="Cartoonist-amount" class="amount"></h2>
+                            <h3 id="Cartoonist-cost" class="cost"></h3>
                         </div>
                     </div>
                 </div>
