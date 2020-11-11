@@ -133,7 +133,11 @@
             var Cats = new PusheenClickerWorker("Cats","Adopt a cat to help you on your journey to get more Pusheens",1,100,100,1);
             var Merchandise = new PusheenClickerWorker("Merchandise","Make Pusheen merchandise to help spread Pusheen around",10,1100,1000,1);
             var Cartoonist = new PusheenClickerWorker("Cartoonist","Hire a cartoonist to draw Pusheens for you",100,12000,7500,1);
-            var WorkerList = [Cats,Merchandise,Cartoonist];
+            var AdoptionCenter = new PusheenClickerWorker("Adoption Center","Construct a Pusheen Adoption Center to help homeless Pusheens find a home",1000,130000,115000,1);
+            var Mine = new PusheenClickerWorker("Mine","Adopt a cat to help you on your journey to get more Pusheens",10000,1400000,9500000,1);
+            var Factory = new PusheenClickerWorker("Factory","Make Pusheen merchandise to help spread Pusheen around",100000,15000000,12500000,1);
+            var Bank = new PusheenClickerWorker("Bank","Hire a cartoonist to draw Pusheens for you",1000000,160000000,150000000,1);
+            var WorkerList = [Cats,Merchandise,Cartoonist,AdoptionCenter,Mine,Factory,Bank];
             
             function runPusheenClicker(){
                 if(localStorage.getItem("openedPreviously")=="true"){
@@ -674,6 +678,34 @@
             left:0px;
             top:32.8vh;
         }
+        #AdoptionCenter{
+            width:18.75vw;
+            height:16.39vh;
+            position:absolute;
+            left:0px;
+            top:49.2vh;
+        }
+        #Mine{
+            width:18.75vw;
+            height:16.39vh;
+            position:absolute;
+            left:0px;
+            top:65.6vh;
+        }
+        #Factory{
+            width:18.75vw;
+            height:16.39vh;
+            position:absolute;
+            left:0px;
+            top:82vh;
+        }
+        #Bank{
+            width:18.75vw;
+            height:16.39vh;
+            position:absolute;
+            left:0px;
+            top:98.4vh;
+        }
         #pusheenclicker-infowindow{
             display:block;
             width:20vw;
@@ -930,6 +962,12 @@
                                 <img id="generalshop-cats-multiplier"onmouseover="pusheenShopInfoWindow(Cats,'upgrade');" onmousedown="pusheenUpgradeButtonActive('cats');" onmouseup="pusheenUpgradeButtonInactive('cats');"onclick="workerUpgrades(Cats);"src="cats_PowerUpgrade.png"/>
                                 <img id="generalshop-merchandise-multiplier"onmouseover="pusheenShopInfoWindow(Merchandise,'upgrade');" onmousedown="pusheenUpgradeButtonActive('merchandise');" onmouseup="pusheenUpgradeButtonInactive('merchandise');"onclick="workerUpgrades(Merchandise);"src="merchandise_PowerUpgrade.png"/>
                                 <img id="generalshop-cartoonist-multiplier"onmouseover="pusheenShopInfoWindow(Cartoonist,'upgrade');" onmousedown="pusheenUpgradeButtonActive('cartoonist');" onmouseup="pusheenUpgradeButtonInactive('cartoonist');"onclick="workerUpgrades(Cartoonist);"src="cartoonist_PowerUpgrade.png"/>
+                                
+                                
+                                <img id="generalshop-adoptioncenter-multiplier"onmouseover="pusheenShopInfoWindow(AdoptionCenter,'upgrade');" onmousedown="pusheenUpgradeButtonActive('adoptioncenter');" onmouseup="pusheenUpgradeButtonInactive('adoptioncenter');"onclick="workerUpgrades(AdoptionCenter);"src="adoptioncenter_PowerUpgrade.png"/>
+                                <img id="generalshop-mine-multiplier"onmouseover="pusheenShopInfoWindow(Mine,'upgrade');" onmousedown="pusheenUpgradeButtonActive('mine');" onmouseup="pusheenUpgradeButtonInactive('mine');"onclick="workerUpgrades(Mine);"src="mine_PowerUpgrade.png"/>
+                                <img id="generalshop-factory-multiplier"onmouseover="pusheenShopInfoWindow(Factory,'upgrade');" onmousedown="pusheenUpgradeButtonActive('factory');" onmouseup="pusheenUpgradeButtonInactive('factory');"onclick="workerUpgrades(Factory);"src="factory_PowerUpgrade.png"/>
+                                <img id="generalshop-bank-multiplier"onmouseover="pusheenShopInfoWindow(Bank,'upgrade');" onmousedown="pusheenUpgradeButtonActive('bank');" onmouseup="pusheenUpgradeButtonInactive('bank');"onclick="workerUpgrades(Bank);"src="bank_PowerUpgrade.png"/>
                             </div>
                         </div>
                         <div id="prestige-shop">
@@ -957,6 +995,26 @@
                             <img id="Cartoonist-image" onclick="newWorker(Cartoonist);" src="Cartoonist_Shop_Button.png"/>
                             <h2 id="Cartoonist-amount" class="amount"></h2>
                             <h3 id="Cartoonist-cost" class="cost"></h3>
+                        </div>
+                        <div onmouseover="pusheenShopInfoWindow(AdoptionCenter,'worker');" onmousedown="pusheenShopButtonActive('Adoption Center');" onmouseup="pusheenShopButtonInactive('Adoption Center');" id="AdoptionCenter">
+                            <img id="Adoption Center-image" onclick="newWorker(AdoptionCenter);" src="Adoption Center_Shop_Button.png"/>
+                            <h2 id="Adoption Center-amount" class="amount"></h2>
+                            <h3 id="Adoption Center-cost" class="cost"></h3>
+                        </div>
+                        <div onmouseover="pusheenShopInfoWindow(Mine,'worker');" onmousedown="pusheenShopButtonActive('Mine');" onmouseup="pusheenShopButtonInactive('Mine');" id="Mine">
+                            <img id="Mine-image" onclick="newWorker(Mine);" src="Mine_Shop_Button.png"/>
+                            <h2 id="Mine-amount" class="amount"></h2>
+                            <h3 id="Mine-cost" class="cost"></h3>
+                        </div>
+                        <div onmouseover="pusheenShopInfoWindow(Factory,'worker');" onmousedown="pusheenShopButtonActive('Factory');" onmouseup="pusheenShopButtonInactive('Factory');" id="Factory">
+                            <img id="Factory-image" onclick="newWorker(Factory);" src="Factory_Shop_Button.png"/>
+                            <h2 id="Factory-amount" class="amount"></h2>
+                            <h3 id="Factory-cost" class="cost"></h3>
+                        </div>
+                        <div onmouseover="pusheenShopInfoWindow(Bank,'worker');" onmousedown="pusheenShopButtonActive('Bank');" onmouseup="pusheenShopButtonInactive('Bank');" id="Bank">
+                            <img id="Bank-image" onclick="newWorker(Bank);" src="Bank_Shop_Button.png"/>
+                            <h2 id="Bank-amount" class="amount"></h2>
+                            <h3 id="Bank-cost" class="cost"></h3>
                         </div>
                     </div>
                 </div>
