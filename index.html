@@ -136,6 +136,27 @@
             var WorkerList = [Cats,Merchandise,Cartoonist];
             
             function runPusheenClicker(){
+                if(localStorage.getItem("openedPreviously")=="true"){
+                    var localstorage_pusheencount = localStorage.getItem("storage_pusheenCount");        
+                    pusheenCount = parseInt(localstorage_pusheencount);
+                    var i;
+                    for(i=0;i<WorkerList.length;i++){
+                        var j;
+                        var k;
+                        j = WorkerList[i].name;
+                        k = localStorage.getItem("storage_"+j+"_amount");
+                            WorkerList[i].amount = parseInt(k);
+                    }
+                    for(i=0;i<WorkerList.length;i++){
+                        var j;
+                        var k;
+                        j = WorkerList[i].name;
+                        k = localStorage.getItem("storage_"+j+"_upgradeamount");
+                            WorkerList[i].upgradeAmount = parseInt(k);
+                    }
+                    Click.upgradeAmount = parseInt(localStorage.getItem("storage_clickupgradeamount"));
+                }
+                localStorage.setItem("openedPreviously","true");
                 /*openInterface();*/
                 document.getElementById("website-title").innerHTML = "Pusheen Clicker"
                 document.getElementById("pusheenclicker-content").removeAttribute("hidden")
@@ -143,35 +164,7 @@
                 pusheenCountFormatted = numberFormatter(pusheenCount);
                 document.getElementById("pusheen-count").innerHTML = pusheenCountFormatted+"<br>Pusheens";
                 pusheenClickerRunningCheck = true;
-                var localstorage_pusheencount = localStorage.getItem("storage_pusheenCount");
-                if(typeof(localstorage_pusheencount)!=='undefined'){
-                    pusheenCount = parseInt(localstorage_pusheencount);
-                }else{
-                    pusheenCount=0;
-                }
-                var i;
-                for(i=0;i<WorkerList.length;i++){
-                    var j;
-                    var k;
-                    j = WorkerList[i].name;
-                    k = localStorage.getItem("storage_"+j+"_amount");
-                    if(typeof(k)!=='undefined'){
-                        WorkerList[i].amount = parseInt(k);
-                    }else{
-                        WorkerList[i].amount = 0;
-                    }
-                }
-                for(i=0;i<WorkerList.length;i++){
-                    var j;
-                    var k;
-                    j = WorkerList[i].name;
-                    k = localStorage.getItem("storage_"+j+"_upgradeamount");
-                    if(typeof(k)!=='undefined'){
-                        WorkerList[i].upgradeAmount = parseInt(k);
-                    }else{
-                        WorkerList[i].upgradeAmount = 0;
-                    }
-                }
+                
                 pusheenclickerupdaterinterval = setInterval(Updater,1);
                 Updater();
                 pusheenclickerworkerinterval = setInterval(RunWorkers,1000);
@@ -275,6 +268,7 @@
                 
             }
                 localStorage.setItem("storage_pusheenCount",pusheenCount);
+                localStorage.setItem("storage_clickupgradeamount",Click.upgradeAmount);
                 pusheenCountFormatted = numberFormatter(pusheenCount);
                 document.getElementById("pusheen-count").innerHTML = pusheenCountFormatted+"<br>Pusheens";
             }
@@ -302,7 +296,7 @@
                 
             }
             function pusheenclickerPROGRESSRESET1(){
-                var confirm_progress_reset = prompt('Are you sure you want to delete all of you progress and reset? If so, type "PUSHEENSUCKS" into the textbox:, Harry Potter');
+                var confirm_progress_reset = prompt('Are you sure you want to delete all of you progress and reset? If so, type "PUSHEENSUCKS" into the textbox:');
                 if (confirm_progress_reset == "PUSHEENSUCKS") {
                     pusheenclickerPROGRESSRESET2();
                 }
@@ -313,8 +307,10 @@
                     WorkerList[i].amount=0;
                     WorkerList[i].upgradeAmount=0;
                 }
+                Click.upgradeAmount = 0;
                 pusheenCount=0;
                 localStorage.clear();
+                localStorage.setItem("openedPreviously","true");
             }
             
             
