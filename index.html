@@ -101,6 +101,10 @@
             //Pusheen Clicker
             var pusheenclickerworkerinterval;
             var pusheenclickerupdaterinterval;
+            var unicornpusheenworkerinterval;
+            var bonustimerinterval;
+            var bonustimer;
+            var unicornpusheeninterval;
             var pusheenCount = 0;
             var pusheenCountFormatted = "";
             var clickMultiplier = 1;
@@ -108,7 +112,8 @@
             var unicornpusheenMultiplier = 1;
             var prestigeMultiplier = 1;
             var workerCostMultiplier = 1.15;
-            var upgradeCostMultiplier = 7.63;
+            var upgradeCostMultiplier = 13.63;
+            var BonusRunning = "false";
             
             var purchaseAmount = 1;
             
@@ -125,7 +130,7 @@
                     this.upgradeAmount = 0;
                     this.cost=Math.round((workerCostMultiplier**this.amount)*this.baseCost);
                     this.upgradeCost = Math.round((this.baseUpgradeCost)*upgradeCostMultiplier**this.upgradeAmount);
-                    this.power = (this.amount*this.basePower*(this.powerMultiplier*(2**this.upgradeAmount)));
+                    this.power = (this.amount*this.basePower*(this.powerMultiplier*(4**this.upgradeAmount)));
                     this.shopbutton = document.createElement("div");
                     this.hidden = "true";
                 }
@@ -139,12 +144,21 @@
             var Mine = new PusheenClickerWorker("Mine","Mine","Construct a Mine to mine for Pusheens",10000,1400000,9500000,1);
             var Factory = new PusheenClickerWorker("Factory","Factory","Take advantage of the Industrial Revolution and manufacture Pusheens at a never before seen rate",100000,15000000,12500000,1);
             var Bank = new PusheenClickerWorker("Bank","Bank","Build a bank to store and make more Pusheens",1000000,160000000,150000000,1);
-            var WorkerList = [Cats,Merchandise,Cartoonist,AdoptionCenter,Mine,Factory,Bank];
+            
+            var AlchemyLab = new PusheenClickerWorker("AlchemyLab","Alchemy Lab","Turn gold into pusheens!",10000000,1700000000,1620000000,1);
+            var InternetServers = new PusheenClickerWorker("InternetServers","Servers","Send Pusheens through the servers that make up the internet",100000000,18000000000,12000000000,1);
+            var Religions = new PusheenClickerWorker("Religions","Religions","Organize religions to follow and worship Pusheens",1000000000,190000000000,145000000000,1);
+            var WizardTower = new PusheenClickerWorker("WizardTower","Wizard Tower","Use magic to make Pusheens",10000000000,2000000000000,1750000000000,1);
+            var ResearchFacility = new PusheenClickerWorker("ResearchFacility","Research Facility","An Important Research Facility for Pusheens",100000000000,21000000000000,18000000000000,1);
+            var City = new PusheenClickerWorker("City","City","Construct entire cities and take its profits to make more Pusheens",1000000000000,220000000000000,135000000000000,1);
+            
+            var WorkerList = [Cats,Merchandise,Cartoonist,AdoptionCenter,Mine,Factory,Bank,AlchemyLab,InternetServers,Religions,WizardTower,ResearchFacility,City];
             
             function runPusheenClicker(){
                 if(localStorage.getItem("openedPreviously")=="true"){
-                    var localstorage_pusheencount = localStorage.getItem("storage_pusheenCount");        
-                    pusheenCount = parseInt(localstorage_pusheencount);
+                    var localstorage_pusheencount = localStorage.getItem("storage_pusheenCount");
+                    var localstorage_pusheencount2 = localStorage.getItem("storage_pusheenCount2");
+                    pusheenCount = (parseFloat(localstorage_pusheencount))*(10**(parseInt(localstorage_pusheencount2)));
                     var i;
                     for(i=0;i<WorkerList.length;i++){
                         var j;
@@ -189,7 +203,8 @@
                     workerArea.id= (WorkerList[i].class_name+"_area");
                     workerArea.setAttribute("class","Worker_area");
                     workerArea.style.backgroundImage=("url('"+WorkerList[i].class_name+"_backdrop.png')");
-                    workerArea.style.overflow=("auto");
+                    workerArea.style.overflowX=("auto");
+                    workerArea.style.overflowY=("hidden");
                     shopamount.id = WorkerList[i].class_name+"-amount";
                     shopamount.setAttribute("class","amount");
                     shopamount.innerHTML = "Error 404 :(";
@@ -235,10 +250,61 @@
                 pusheenCountFormatted = numberFormatter(pusheenCount);
                 document.getElementById("pusheen-count").innerHTML = pusheenCountFormatted+"<br>Pusheens";
                 
-                pusheenclickerupdaterinterval = setInterval(Updater,1);
+                pusheenclickerupdaterinterval = setInterval(Updater,0.1);
                 Updater();
                 pusheenclickerworkerinterval = setInterval(RunWorkers,1000);
-                RunWorkers();
+                unicornpusheeninterval = setInterval(unicornPusheenLoop,1200000);
+            }
+            function unicornPusheenLoop(){
+                document.getElementById("header_pusheen").setAttribute("src","unicornpusheentest.png");
+                document.getElementById("header_pusheen").setAttribute("onclick","unicornPusheenOnClick();");
+                setTimeout(function(){
+                    document.getElementById("header_pusheen").setAttribute("src","pusheen.png");
+                    document.getElementById("header_pusheen").removeAttribute("onclick");
+                },30000);
+            }
+            function unicornPusheenOnClick(){
+                document.getElementById("header_pusheen").setAttribute("src","pusheen.png");
+                document.getElementById("header_pusheen").removeAttribute("onclick");
+                if(BonusRunning=="false"){
+                    BonusRunning = "true";
+                    var rng = getRandomInt(0,3);
+                    if(rng==0){
+                        bonustimer=420000;
+                        bonustimerinterval=setInterval(RunBonusTimer,1000);
+                        RunBonusTimer();
+                        document.getElementById("BonusTypeAnnouncement").innerHTML = "UNICORN PUSHEEN BONUS:<br>Half Worker Time";
+                        unicornpusheenworkerinterval = setInterval(RunWorkers,1000);
+                        setTimeout(function(){clearInterval(unicornpusheenworkerinterval);BonusRunning = "false";clearInterval(bonustimerinterval);document.getElementById("BonusTypeAnnouncement").innerHTML = "";document.getElementById("BonusTimer").innerHTML = "";},420000);
+                    }
+                    else if(rng==1){
+                        bonustimer=420000;
+                        bonustimerinterval=setInterval(RunBonusTimer,1000);
+                        RunBonusTimer();
+                        document.getElementById("BonusTypeAnnouncement").innerHTML = "UNICORN PUSHEEN BONUS:<br>ALL PRODUCTION MULTIPLIED BY 20";
+                        unicornpusheenMultiplier = 20;
+                        setTimeout(function(){unicornpusheenMultiplier=1;BonusRunning = "false";clearInterval(bonustimerinterval);document.getElementById("BonusTypeAnnouncement").innerHTML = "";document.getElementById("BonusTimer").innerHTML = "";},420000);
+                    }
+                    else if(rng==2){
+                        bonustimer=30000;
+                        bonustimerinterval=setInterval(RunBonusTimer,1000);
+                        RunBonusTimer();
+                        document.getElementById("BonusTypeAnnouncement").innerHTML = "UNICORN PUSHEEN BONUS:<br>AUTO CLICKER, CLICKS EVERY 1/100 OF A SECOND";
+                        unicornpusheenworkerinterval = setInterval(pusheenClick,10);
+                        setTimeout(function(){clearInterval(unicornpusheenworkerinterval);BonusRunning = "false";clearInterval(bonustimerinterval);document.getElementById("BonusTypeAnnouncement").innerHTML = "";document.getElementById("BonusTimer").innerHTML = "";},30000);
+                        
+                    }else{alert("it broke :(");}
+                }
+                else{alert("There is already a Bonus running!");}
+            }
+            function RunBonusTimer(){
+                document.getElementById("BonusTimer").innerHTML = timeNumberFormatter(bonustimer);
+                bonustimer=bonustimer-1000;
+            }
+            function getRandomInt(min, max) {
+                min = Math.ceil(min);
+                max = Math.floor(max);
+                return Math.floor(Math.random() * (max - min + 1)) + min;
             }
             function pusheenClick(){
                 pusheenCount= pusheenCount + (Click.power*generalMultiplier*prestigeMultiplier*unicornpusheenMultiplier*clickMultiplier);
@@ -298,9 +364,107 @@
                 else if(num > 10**36-1 && num < 10**39){
                     return (num/10**36).toFixed(3) + 'u';
                 }
+                else if(num > 10**39-1 && num < 10**42){
+                    return (num/10**39).toFixed(3) + 'dd';
+                }
+                else if(num > 10**42-1 && num < 10**45){
+                    return (num/10**42).toFixed(3) + 'td';
+                }
+                else if(num > 10**45-1 && num < 10**48){
+                    return (num/10**45).toFixed(3) + 'qd';
+                }
+                else if(num > 10**48-1 && num < 10**51){
+                    return (num/10**48).toFixed(3) + 'Qd';
+                }
+                else if(num > 10**51-1 && num < 10**54){
+                    return (num/10**51).toFixed(3) + 'sd';
+                }
+                else if(num > 10**54-1 && num < 10**57){
+                    return (num/10**54).toFixed(3) + 'Sd';
+                }
+                else if(num > 10**57-1 && num < 10**60){
+                    return (num/10**57).toFixed(3) + 'od';
+                }
+                else if(num > 10**60-1 && num < 10**63){
+                    return (num/10**60).toFixed(3) + 'nd';
+                }
+                else if(num > 10**63-1 && num < 10**66){
+                    return (num/10**63).toFixed(3) + 'v';
+                }
+                else if(num > 10**66-1 && num < 10**69){
+                    return (num/10**66).toFixed(3) + 'uv';
+                }
+                else if(num > 10**69-1 && num < 10**72){
+                    return (num/10**69).toFixed(3) + 'dv';
+                }
+                else if(num > 10**72-1 && num < 10**75){
+                    return (num/10**72).toFixed(3) + 'tv';
+                }
+                else if(num > 10**75-1 && num < 10**78){
+                    return (num/10**75).toFixed(3) + 'qv';
+                }
+                else if(num > 10**78-1 && num < 10**81){
+                    return (num/10**78).toFixed(3) + 'Qv';
+                }
+                else if(num > 10**81-1 && num < 10**84){
+                    return (num/10**81).toFixed(3) + 'sv';
+                }
+                else if(num > 10**84-1 && num < 10**87){
+                    return (num/10**84).toFixed(3) + 'Sv';
+                }
+                else if(num > 10**87-1 && num < 10**90){
+                    return (num/10**87).toFixed(3) + 'ov';
+                }
+                else if(num > 10**90-1 && num < 10**93){
+                    return (num/10**90).toFixed(3) + 'nv';
+                }
+                else if(num > 10**93-1 && num < 10**96){
+                    return (num/10**93).toFixed(3) + 'T';
+                }
+                else if(num > 10**96-1 && num < 10**99){
+                    return (num/10**96).toFixed(3) + 'uT';
+                }
+                else if(num > 10**99-1 && num < 10**102){
+                    return (num/10**99).toFixed(3) + 'dT';
+                }
+                else if(num > 10**102-1 && num < 10**105){
+                    return (num/10**102).toFixed(3) + 'tT';
+                }
+                else if(num > 10**105-1 && num < 10**108){
+                    return (num/10**105).toFixed(3) + 'qT';
+                }
+                else if(num > 10**108-1 && num < 10**111){
+                    return (num/10**108).toFixed(3) + 'QT';
+                }
+                else if(num > 10**111-1 && num < 10**114){
+                    return (num/10**111).toFixed(3) + 'sT';
+                }
+                else if(num > 10**114-1 && num < 10**117){
+                    return (num/10**114).toFixed(3) + 'ST';
+                }
+                else if(num > 10**117-1 && num < 10**120){
+                    return (num/10**117).toFixed(3) + 'oT';
+                }
+                else if(num > 10**120-1 && num < 10**123){
+                    return (num/10**120).toFixed(3) + 'nT';
+                }
+                //dynamic
+                else if(num > 10**123-1){
+                    return num.toExponential(3);
+                    
+                }
                 else if(num < 10**3){
                     return num;
                 }
+            }
+            function timeNumberFormatter(num){
+                var milliseconds = Math.floor(num%1000);
+                var rawseconds = Math.floor(num/1000);
+                var seconds = Math.floor(rawseconds%60);
+                var rawminutes = Math.floor(rawseconds/60);
+                var minutes = Math.floor(rawminutes%60);
+                var hours = Math.floor(rawminutes/60);
+                return hours+":"+minutes+":"+seconds+"."+milliseconds;
             }
             function pusheenShopInfoWindow(workertype,type){
                 if(type=="worker"){
@@ -310,8 +474,8 @@
                 }
                 else if(type == 'upgrade'){
                     document.getElementById("pusheenclicker-infowindow-name").innerHTML = workertype.name+' Upgrade';
-                    document.getElementById("pusheenclicker-infowindow-cost").innerHTML = workertype.name+' Power:'+numberFormatter(workertype.basePower*(workertype.powerMultiplier*(2**workertype.upgradeAmount)))+'<br>Cost:'+numberFormatter(workertype.upgradeCost);
-                    document.getElementById("pusheenclicker-infowindow-description").innerHTML = "Double "+workertype.name+" Power";
+                    document.getElementById("pusheenclicker-infowindow-cost").innerHTML = workertype.name+' Power:'+numberFormatter(workertype.power/workertype.amount)+'<br>Cost:'+numberFormatter(workertype.upgradeCost);
+                    document.getElementById("pusheenclicker-infowindow-description").innerHTML = "Increase "+workertype.name+" Power";
                 }
                 else{return;}
             }
@@ -324,36 +488,46 @@
             function Updater(){
                 Click.amount=1;
                 Click.upgradeCost = Math.round((Click.baseUpgradeCost)*upgradeCostMultiplier**Click.upgradeAmount);
-                Click.power=(Click.amount*Click.basePower*(Click.powerMultiplier*(2**Click.upgradeAmount)));
+                Click.power=(Click.amount*Click.basePower*(Click.powerMultiplier*(4**Click.upgradeAmount)));
                 var updaterforloopvar;
                 for(updaterforloopvar=0;updaterforloopvar<WorkerList.length;updaterforloopvar++){ 
                     WorkerList[updaterforloopvar].cost=Math.round((workerCostMultiplier**WorkerList[updaterforloopvar].amount)*WorkerList[updaterforloopvar].baseCost);
                     WorkerList[updaterforloopvar].upgradeCost = Math.round((WorkerList[updaterforloopvar].baseUpgradeCost)*upgradeCostMultiplier**WorkerList[updaterforloopvar].upgradeAmount);
-                    WorkerList[updaterforloopvar].power = (WorkerList[updaterforloopvar].amount*WorkerList[updaterforloopvar].basePower*(WorkerList[updaterforloopvar].powerMultiplier*(2**WorkerList[updaterforloopvar].upgradeAmount)));
+                    WorkerList[updaterforloopvar].power = (WorkerList[updaterforloopvar].amount*WorkerList[updaterforloopvar].basePower*(WorkerList[updaterforloopvar].powerMultiplier*(3**WorkerList[updaterforloopvar].upgradeAmount)));
                     document.getElementById(WorkerList[updaterforloopvar].class_name+"-amount").innerHTML = numberFormatter(WorkerList[updaterforloopvar].amount);
                     document.getElementById(WorkerList[updaterforloopvar].class_name+"-cost").innerHTML = numberFormatter(WorkerList[updaterforloopvar].cost);
-                    WorkerList[0].hidden="false";
+                    
                     if(updaterforloopvar>0){
                         if(WorkerList[updaterforloopvar-1].amount>0){
                             WorkerList[updaterforloopvar].hidden="false";
                         }
                     }
+                    
                     if(WorkerList[updaterforloopvar].hidden=="true"){
                         WorkerList[updaterforloopvar].shopbutton.setAttribute("hidden","true");
                         document.getElementById(WorkerList[updaterforloopvar].class_name+"_area").setAttribute("hidden","true");
+                        document.getElementById("generalshop-"+(WorkerList[updaterforloopvar].class_name).toLowerCase()+"-multiplier").setAttribute("hidden","true");
                     }
                     else if(WorkerList[updaterforloopvar].hidden="false"){
                         WorkerList[updaterforloopvar].shopbutton.removeAttribute("hidden");
                         document.getElementById(WorkerList[updaterforloopvar].class_name+"_area").removeAttribute("hidden");
                     }
+                    WorkerList[0].hidden="false";
+            
+                    if(WorkerList[updaterforloopvar].amount > 0){
+                        document.getElementById("generalshop-"+(WorkerList[updaterforloopvar].class_name).toLowerCase()+"-multiplier").removeAttribute("hidden");
+                    }
                     localStorage.setItem("storage_"+WorkerList[updaterforloopvar].class_name+"_amount",WorkerList[updaterforloopvar].amount);
                     localStorage.setItem("storage_"+WorkerList[updaterforloopvar].class_name+"_hidden",WorkerList[updaterforloopvar].hidden);
                     localStorage.setItem("storage_"+WorkerList[updaterforloopvar].class_name+"_upgradeamount",WorkerList[updaterforloopvar].upgradeAmount);  
                 }
-                localStorage.setItem("storage_pusheenCount",pusheenCount);
+                var temporarythingy = (pusheenCount.toExponential()).split("e+");
+                localStorage.setItem("storage_pusheenCount",temporarythingy[0]);
+                localStorage.setItem("storage_pusheenCount2",temporarythingy[1]);
                 localStorage.setItem("storage_clickupgradeamount",Click.upgradeAmount);
                 pusheenCountFormatted = numberFormatter(pusheenCount);
                 document.getElementById("pusheen-count").innerHTML = pusheenCountFormatted+"<br>Pusheens";
+                localStorage.setItem("openedPreviously","true");
             }
             function newWorker(workertype){
                 if(pusheenCount >= workertype.cost){
@@ -391,10 +565,48 @@
                 document.getElementById("general-shop").removeAttribute("hidden");
                 
             }
+            function runPusheenConsole(input){
+                if(input[1]=="CONSOLE"){
+                    if(input[2]=="add"){
+                        for(var i=0; i<input[4];i++){
+                            pusheenCount=pusheenCount+WorkerList[parseInt(input[3])].cost;
+                            newWorker(WorkerList[parseInt(input[3])])
+                        }
+                    }    
+                    else if(input[2]=="rich"){
+                        pusheenCount=pusheenCount+100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
+                    }
+                    else if(input[2]=="upgrade"){
+                        if(input[3]=="click"){
+                            for(var i=0; i<input[4];i++){
+                                pusheenCount=pusheenCount+Click.upgradeCost;
+                                workerUpgrades(Click);
+                            }
+                        }
+                        else{
+                            for(var i=0; i<input[4];i++){
+                                pusheenCount=pusheenCount+WorkerList[parseInt(input[3])].upgradeCost;
+                                workerUpgrades(WorkerList[parseInt(input[3])])
+                            }
+                        }
+                    }
+                    else if(input[2]=="reveal"){
+                        for(var i=0;i<WorkerList.length;i++){
+                            WorkerList[i].hidden = "false";
+                            document.getElementById("generalshop-"+(WorkerList[i].class_name).toLowerCase()+"-multiplier").removeAttribute("hidden");
+                        }
+                    }
+                }
+                else{return;}
+            }
             function pusheenclickerPROGRESSRESET1(){
                 var confirm_progress_reset = prompt('Are you sure you want to delete all of you progress and reset? If so, type "PUSHEENSUCKS" into the textbox:');
+                var devstuff=confirm_progress_reset.split("~");
                 if (confirm_progress_reset == "PUSHEENSUCKS") {
                     pusheenclickerPROGRESSRESET2();
+                }
+                else if (devstuff[1]=="CONSOLE") {
+                    runPusheenConsole(devstuff);
                 }
             }
             function pusheenclickerPROGRESSRESET2(){
@@ -403,20 +615,14 @@
                     WorkerList[i].amount=0;
                     WorkerList[i].upgradeAmount=0;
                     document.getElementById(WorkerList[i].class_name+"_area").innerHTML="";
+                    WorkerList[i].shopbutton.setAttribute("hidden","true");
+                    document.getElementById(WorkerList[i].class_name+"_area").setAttribute("hidden","true");
                 }
                 Click.upgradeAmount = 0;
                 pusheenCount=0;
                 WorkerList[0].hidden="false";
-                pusheenclickerPROGRESSRESET3();
                 localStorage.clear();
-                localStorage.setItem("openedPreviously","true");
-                
-            }
-            function pusheenclickerPROGRESSRESET3(){
-                for(i=0;i<WorkerList.lenght;i++){
-                    WorkerList[i].shopbutton.setAttribute("hidden","true");
-                    document.getElementById(WorkerList[i].class_name+"_area").setAttribute("hidden","true");
-                }
+                location.reload();
             }
             
             
@@ -536,6 +742,15 @@
             width:30vw;
             height:5vh;
             font-size:5vmin;
+        }
+        .pusheenclicker-header_h2_2{
+            float:right;
+            display:block;
+            color:white;
+            text-align: center;
+            width:30vw;
+            height:5vh;
+            font-size:3vmin;
         }
         .active {
             background-color: #4CAF50;
@@ -875,7 +1090,7 @@
             position:relative;
             min-width:100%;
             width:auto;
-            height:16.4vh;
+            height:17.4vh;
             margin-bottom:2vw;
         }
         .Worker_area_img{
@@ -1013,6 +1228,8 @@
                         <div id="pusheenclicker-header">
                             <h2 class="pusheenclicker-header_h2">The Pusheen Clicker</h2>
                             <img id="header_pusheen" width="100" height="100" src="Pusheen.png"/>
+                            <h2 id="BonusTypeAnnouncement" class="pusheenclicker-header_h2_2"></h2>
+                            <h2 id="BonusTimer" class="pusheenclicker-header_h2_2"></h2>
                         </div>
                         <ul class="pusheenclickernav-ul">
                             <li class="pusheenclickernav-li"><a id="pusheenclicker-home" class="" onclick="pusheenclickerHome();">Home</a></li>
@@ -1046,7 +1263,7 @@
                             <h2 id="center-area-text">This is still a work progress. I know, it's bad but it's still in development so it MIGHT get better(it's not). But nonetheless, I hope you have a nice stay here.</h2>
                             <h2 id="center-area-title">Known Bugs:</h2>
                             <h2 id="center-area-text">
-                                >When resetting, it doesn't hide the workers.<br>
+                                >No known bugs! (YET)<br>
                             </h2>
                             <h2 id="center-area-title">Credits</h2>
                             <h2 id="center-area-text">
