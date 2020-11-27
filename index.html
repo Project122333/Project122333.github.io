@@ -465,13 +465,15 @@
                 document.getElementById("header_pusheen").setAttribute("src","unicornpusheentest.png");
                 document.getElementById("header_pusheen").setAttribute("onclick","unicornPusheenOnClick();");
                 unicornpusheentimeout= setTimeout(function(){
-                    document.getElementById("header_pusheen").setAttribute("src","Pusheen.png");
+                    //CHRISTMAS
+                    document.getElementById("header_pusheen").setAttribute("src","christmas_pusheen.png");
                     document.getElementById("header_pusheen").removeAttribute("onclick");
                 },60000);
             }
             function unicornPusheenOnClick(){
                 clearTimeout(unicornpusheentimeout);
-                document.getElementById("header_pusheen").setAttribute("src","Pusheen.png");
+                //CHRISTMAS
+                document.getElementById("header_pusheen").setAttribute("src","christmas_pusheen.png");
                 document.getElementById("header_pusheen").removeAttribute("onclick");
                 if(BonusRunning=="false"){
                     BonusRunning = "true";
