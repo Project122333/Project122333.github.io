@@ -10,8 +10,10 @@
             var unicornpusheenworkerinterval;
             var bonustimerinterval;
             var bonustimer;
+            var bonusinterval;
             var unicornpusheeninterval;
             var pusheenCount = 0;
+            var crystallineUnicornPusheenCount = 0;
             var pusheenCountFormatted = "";
             var clickMultiplier = 1;
             var generalMultiplier = 1;
@@ -44,13 +46,62 @@
                 }
             }
             class PusheenClickerResearch{
-                constructor(_class_name,_name,_imgname,_description,_unlocks){
+                constructor(_class_name,_name,_imgname,_description,_unlocks,_releases){
                     this.class_name = _class_name;
                     this.name = _name;
                     this.imgname = _imgname;
                     this.description = _description;
                     this.unlocks = _unlocks;
+                    this.releases = _releases;
                     this.cost = _unlocks[0].baseCost;
+                }
+            }
+            class PusheenClickerDoodad{
+                constructor(_class_name,_name,_imgname,_corner,_description,_baseCost,_cost,_time,_type,_speed=null,_researched="false"){
+                    this.class_name = _class_name;
+                    this.name = _name;
+                    this.imgname = _imgname;
+                    this.corner = _corner;
+                    this.description = _description;
+                    this.baseCost = _baseCost;
+                    this.cost = _cost;
+                    this.time = _time;
+                    this.type = _type;
+                    this.speed = _speed;
+                    this.researched = _researched;
+                }
+                runThis(){
+                    switch(this.type){
+                        case "TimeWarp":
+                            for(var i=0;i<(Math.floor(this.time/1000));i++){
+                                RunWorkers();
+                            }
+                            BonusRunning="false";
+                            break;
+                        case "AutoClicker":
+                            bonustimer=this.time;
+                            bonustimerinterval=setInterval(RunBonusTimer,1000);
+                            RunBonusTimer();
+                            bonusinterval=setInterval(pusheenClick,this.speed);
+                            document.getElementById("BonusTypeAnnouncement").innerHTML = this.description;
+                            
+                            
+                            
+                            setTimeout(function(){clearInterval(bonusinterval);BonusRunning = "false";clearInterval(bonustimerinterval);document.getElementById("BonusTypeAnnouncement").innerHTML = "";document.getElementById("BonusTimer").innerHTML = "";},this.time);
+                            break;
+                            
+                        case "WorkerSpeedUp":
+                            bonustimer=this.time;
+                            bonustimerinterval=setInterval(RunBonusTimer,1000);
+                            RunBonusTimer();
+                            bonusinterval=setInterval(RunWorkers,this.speed);
+                            document.getElementById("BonusTypeAnnouncement").innerHTML = this.description;
+                            
+                            
+                            
+                            setTimeout(function(){clearInterval(bonusinterval);BonusRunning = "false";clearInterval(bonustimerinterval);document.getElementById("BonusTypeAnnouncement").innerHTML = "";document.getElementById("BonusTimer").innerHTML = "";},this.time);
+                            break;
+                    }
                 }
             }
             
@@ -85,16 +136,44 @@
             
             var WorkerList = [Cats,Merchandise,Cartoonist,AdoptionCenter,Mine,Factory,Bank,AlchemyLab,InternetServers,Religions,WizardTower,ResearchFacility,City,RocketShip,SpaceStation,MoonBase,MarsBase,ColonyShip,DysonSphere,Terraformer,Singularity,Portal,SuperCity];
             
-            var RocketShipResearch = new PusheenClickerResearch("RocketShipResearch","Rocket Science","RocketShip","It's rather easy to launch a rocket to space. It's not even rocket science, or is it? Unlocks the Rocket Ship(Sorry, I know it's a bad joke)",[RocketShip]);
-            var SpaceStationResearch = new PusheenClickerResearch("SpaceStationResearch","Into Orbit!","SpaceStation","The obvious next step after launching a rocket ship is to send a space station into orbit. Unlocks the Space Station",[SpaceStation]);
-            var LunarMiningResearch = new PusheenClickerResearch("LunarMiningResearch","Lunar Mining","MoonBase","Raw Resources are important for making Pusheens and normal mining ain't cutting it now more, time to upgrade to Lunar Mining! Unlocks the Moon Base",[MoonBase]);
-            var MarsColonizationResearch = new PusheenClickerResearch("MarsColonizationResearch","Mars Colonization","MarsBase","Pusheens require space and Mars is the perfect place to expand the Pusheen territory. Unlocks the Mars Base",[MarsBase]);
-            var FirstDysonSphereResearch = new PusheenClickerResearch("FirstDysonSphereResearch","The First Dyson Sphere","DysonSphere","When humanity builds the first Dyson Sphere, it will launch us ahead so technologically, it will be on the magnitude of the invention of fire. Unlocks the Colony Ship and the Dyson Sphere",[ColonyShip,DysonSphere]);
-            var TerraformerResearch = new PusheenClickerResearch("TerraformerResearch","Planet Terraformer","Terraformer","Once we run out of habitable planets to colonize, we will have to change other planets into habitable planets. Unlocks the Terraformer",[Terraformer]);
-            var SingularityResearch = new PusheenClickerResearch("SingularityResearch","The Technological Singularity","Singularity","The Singularity is an event where AI reaches a point in which it surpasses human intellect and self-learning. During the Post-Singularity, AI can teach itself everything. Although many invision the post-singularity as a dystopia, in this game it's a good thing, working for the Pusheens. Unlocks the Singularity",[Singularity]);
-            var PortalResearch = new PusheenClickerResearch("PortalResearch","Connecting the Strings","Portal","Fast travel is important, especially in an age where you have to travel several star systems to get where you're going. Portals also allow us to explore strange new lands to get more Pusheens. These portals are made from the artificial wormholes made bent spacetime. OR these portals could've been made from strings in string theory. Both are interesting theories so take your pick :). Unlocks the Portal",[Portal]);
             
-            var ResearchList=[RocketShipResearch,SpaceStationResearch,LunarMiningResearch,MarsColonizationResearch,FirstDysonSphereResearch,TerraformerResearch,SingularityResearch,PortalResearch];
+            var TimeWarp1 = new PusheenClickerDoodad("TimeWarp1","Time Warp 10min","Doodads_TimeWarp","10min","Warp ahead 10 minutes in time",10000000000000000,3,600000,"TimeWarp",null,"true");
+            var TimeWarp2 = new PusheenClickerDoodad("TimeWarp2","Time Warp 20min","Doodads_TimeWarp","20min","Warp ahead 20 minutes in time",1000000000000000000,6,1200000,"TimeWarp");
+            var TimeWarp3 = new PusheenClickerDoodad("TimeWarp3","Time Warp 30min","Doodads_TimeWarp","1/2hr","Warp ahead half an hour in time",100000000000000000000,12,1800000,"TimeWarp");
+            
+            var AutoClicker1 = new PusheenClickerDoodad("AutoClicker1","Auto Clicker Lvl1","Doodads_AutoClicker","lvl1","Click every 100ms for 10min",1000000000000000,1,600000,"AutoClicker",100,"true");
+            var AutoClicker2 = new PusheenClickerDoodad("AutoClicker2","Auto Clicker Lvl2","Doodads_AutoClicker","lvl2","Click every 50ms for 5min",100000000000000000,2,300000,"AutoClicker",50);
+            var AutoClicker3 = new PusheenClickerDoodad("AutoClicker3","Auto Clicker Lvl3","Doodads_AutoClicker","lvl3","Click every 10ms for 1min",10000000000000000000,4,60000,"AutoClicker",10);
+            
+            var WorkerSpeedUp1 = new PusheenClickerDoodad("WorkerSpeedUp1","Worker Speed Up Lvl1","Doodads_WorkerSpeed","lvl1","Double Worker Speed for 5 minutes",10000000000000000,2,600000,"WorkerSpeedUp",1000,"true");
+            var WorkerSpeedUp2 = new PusheenClickerDoodad("WorkerSpeedUp2","Worker Speed Up Lvl2","Doodads_WorkerSpeed","lvl2","Triple Worker Speed for 1 minute",10000000000000000000,4,60000,"WorkerSpeedUp",500);
+            var WorkerSpeedUp3 = new PusheenClickerDoodad("WorkerSpeedUp3","Worker Speed Up Lvl3","Doodads_WorkerSpeed","lvl3","Triple Worker Speed for 2 minutes",100000000000000000000000,8,180000,"WorkerSpeedUp",500);
+            
+            var DoodadsList = [TimeWarp1,TimeWarp2,TimeWarp3,AutoClicker1,AutoClicker2,AutoClicker3,WorkerSpeedUp1,WorkerSpeedUp2,WorkerSpeedUp3];
+            
+            var AutoClicker2Research = new PusheenClickerResearch("AutoClicker2Research","Autoclicker Lvl2 Research","Doodads_AutoClicker","Research the next level of the Auto Clicker",[AutoClicker2],[]);
+            var AutoClicker3Research = new PusheenClickerResearch("AutoClicker3Research","Autoclicker Lvl3 Research","Doodads_AutoClicker","Research the next level of the Auto Clicker",[AutoClicker3],[]);
+            var WorkerSpeedUp2Research = new PusheenClickerResearch("WorkerSpeedUp2Research","Worker Speed Up Lvl2 Research","Doodads_WorkerSpeed","Research the next level of the Worker Speed Up",[WorkerSpeedUp2],[]);
+            var WorkerSpeedUp3Research = new PusheenClickerResearch("WorkerSpeedUp3Research","Worker Speed Up Lvl3 Research","Doodads_WorkerSpeed","Research the next level of the Worker Speed Up",[WorkerSpeedUp3],[]);
+             var TimeWarp2Research = new PusheenClickerResearch("TimeWarp2Research","Time Warp Lvl2 Research","Doodads_TimeWarp","Research the next level of the Time Warp",[TimeWarp2],[]);
+            var TimeWarp3Research = new PusheenClickerResearch("TimeWarp3Research","Time Warp Lvl3 Research","Doodads_TimeWarp","Research the next level of the Time Warp",[TimeWarp3],[]);
+            var PortalResearch = new PusheenClickerResearch("PortalResearch","Connecting the Strings","Portal","Fast travel is important, especially in an age where you have to travel several star systems to get where you're going. Portals also allow us to explore strange new lands to get more Pusheens. These portals are made from the artificial wormholes made bent spacetime. OR these portals could've been made from strings in string theory. Both are interesting theories so take your pick :). Unlocks the Portal",[Portal],[]);
+            var SingularityResearch = new PusheenClickerResearch("SingularityResearch","The Technological Singularity","Singularity","The Singularity is an event where AI reaches a point in which it surpasses human intellect and self-learning. During the Post-Singularity, AI can teach itself everything. Although many invision the post-singularity as a dystopia, in this game it's a good thing, working for the Pusheens. Unlocks the Singularity",[Singularity],[PortalResearch,TimeWarp3Research]);
+            var TerraformerResearch = new PusheenClickerResearch("TerraformerResearch","Planet Terraformer","Terraformer","Once we run out of habitable planets to colonize, we will have to change other planets into habitable planets. Unlocks the Terraformer",[Terraformer],[SingularityResearch,WorkerSpeedUp2Research]);
+            var FirstDysonSphereResearch = new PusheenClickerResearch("FirstDysonSphereResearch","The First Dyson Sphere","DysonSphere","A Dyson Sphere is a mega structure built around a star to absorb almost all of the energy it radiates. When humanity builds the first Dyson Sphere, it will launch us ahead so technologically, it will be on the magnitude of the discovery of fire. Unlocks the Colony Ship and the Dyson Sphere",[ColonyShip,DysonSphere],[TerraformerResearch,TimeWarp2Research]);
+            var MarsColonizationResearch = new PusheenClickerResearch("MarsColonizationResearch","Mars Colonization","MarsBase","Pusheens require space and Mars is the perfect place to expand the Pusheen territory. Unlocks the Mars Base",[MarsBase],[FirstDysonSphereResearch,AutoClicker3Research]);
+            var LunarMiningResearch = new PusheenClickerResearch("LunarMiningResearch","Lunar Mining","MoonBase","Raw Resources are important for making Pusheens and normal mining ain't cutting it now more, time to upgrade to Lunar Mining! Unlocks the Moon Base",[MoonBase],[MarsColonizationResearch]);
+            var SpaceStationResearch = new PusheenClickerResearch("SpaceStationResearch","Into Orbit!","SpaceStation","The obvious next step after launching a rocket ship is to send a space station into orbit. Unlocks the Space Station",[SpaceStation],[LunarMiningResearch,WorkerSpeedUp2Research]);
+            var RocketShipResearch = new PusheenClickerResearch("RocketShipResearch","Rocket Science","RocketShip","It's rather easy to launch a rocket to space. It's not even rocket science, or is it? Unlocks the Rocket Ship(Sorry, I know it's a bad joke)",[RocketShip],[SpaceStationResearch,AutoClicker2Research]);
+            
+            
+            
+            
+            
+            
+            
+            
+            var ResearchList=[RocketShipResearch,SpaceStationResearch,LunarMiningResearch,MarsColonizationResearch,FirstDysonSphereResearch,TerraformerResearch,SingularityResearch,PortalResearch,AutoClicker2Research,AutoClicker3Research,WorkerSpeedUp2Research,WorkerSpeedUp3Research,TimeWarp2Research,TimeWarp3Research];
             
             
             function runPusheenClicker(){
@@ -108,6 +187,12 @@
                     }else{
                         pusheenCount=0;
                     }
+                    var localstorage_crystallineUnicornPusheenCount = localStorage.getItem("storage_crystallineUnicornPusheenCount");
+                    if(localstorage_crystallineUnicornPusheenCount != undefined){
+                    crystallineUnicornPusheenCount = parseInt(localstorage_crystallineUnicornPusheenCount);
+                    }else{
+                        crystallineUnicornPusheenCount=0;
+                    }
                     var i;
                     for(i=0;i<WorkerList.length;i++){
                         var j;
@@ -119,12 +204,12 @@
                         }else{
                             WorkerList[i].amount=0;
                         }
-                            
-                    }
-                    for(i=0;i<WorkerList.length;i++){
-                        var j;
-                        var k;
-                        j = WorkerList[i].class_name;
+                        k = localStorage.getItem("storage_"+j+"_researched");
+                        if(k != undefined){
+                            WorkerList[i].researched = k;
+                        }else{
+                            WorkerList[i].researched="false";
+                        }
                         k = localStorage.getItem("storage_"+j+"_upgradeamount");
                         if(k != undefined){
                             WorkerList[i].upgradeAmount = parseInt(k);
@@ -132,15 +217,13 @@
                             WorkerList[i].upgradeAmount=0;
                         }
                     }
-                    for(i=0;i<WorkerList.length;i++){
+                    for(i=0;i<DoodadsList.length;i++){
                         var j;
                         var k;
-                        j = WorkerList[i].class_name;
+                        j = DoodadsList[i].class_name;
                         k = localStorage.getItem("storage_"+j+"_researched");
                         if(k != undefined){
-                            WorkerList[i].researched = k;
-                        }else{
-                            WorkerList[i].researched="false";
+                            DoodadsList[i].researched = k;
                         }
                     }
                     Click.upgradeAmount = parseInt(localStorage.getItem("storage_clickupgradeamount"));
@@ -193,7 +276,39 @@
                  clickupgrademultiplier.appendChild(clickupgrade_multiplier);
                 document.getElementById("worker-upgrades-power").appendChild(clickupgradepower);
                 document.getElementById("worker-upgrades-multiplier").appendChild(clickupgrademultiplier);
-                var i;
+                var i; 
+                for(i=0;i<DoodadsList.length;i++){
+                    var doodadsbutton = document.createElement("div");
+                    var generalupgradeimg4 = document.createElement("img");
+                    var generalupgradedisplayimg4 = document.createElement("img");
+                    var doodads_icon = document.createElement("h2");
+                    
+                    doodadsbutton.id="generalshop-"+(DoodadsList[i].class_name).toLowerCase();
+                    doodadsbutton.setAttribute("class","worker-upgrade");
+                    doodadsbutton.setAttribute("onmouseover","pusheenShopInfoWindow("+DoodadsList[i].class_name+",'doodads');");
+                    doodadsbutton.setAttribute("onmousedown","pusheenUpgradeButtonActive('"+ (DoodadsList[i].class_name).toLowerCase()+"');");
+                    doodadsbutton.setAttribute("onmouseup","pusheenUpgradeButtonInactive('"+ (DoodadsList[i].class_name).toLowerCase()+"');");
+                    doodadsbutton.setAttribute("onclick","workerUpgrades("+DoodadsList[i].class_name+",'doodads');");
+                    
+                    generalupgradeimg4.id="generalshop-"+(DoodadsList[i].class_name).toLowerCase()+"-upgrade-img";
+                    generalupgradeimg4.setAttribute("src","Upgrade_Base.png");
+                    generalupgradeimg4.setAttribute("class","worker-upgrades-img");
+                    
+                    generalupgradedisplayimg4.setAttribute("src",DoodadsList[i].imgname+".png");
+                    generalupgradedisplayimg4.setAttribute("class","worker-upgrades-img");
+                    
+                    doodads_icon.innerHTML=DoodadsList[i].corner;
+                    doodads_icon.setAttribute("class","corner_icon");
+                    
+                    doodadsbutton.appendChild(generalupgradeimg4);
+                    doodadsbutton.appendChild(generalupgradedisplayimg4);
+                    doodadsbutton.appendChild(doodads_icon);
+                    
+                    document.getElementById("doodads-centerarea").appendChild(doodadsbutton);
+                    if(DoodadsList[i].researched=="false"){
+                        document.getElementById("generalshop-"+DoodadsList[i].class_name.toLowerCase()).setAttribute("hidden","true");
+                    }
+                }
                 for(i=0;i<ResearchList.length;i++){
                     var researchbutton = document.createElement("div");
                     var generalupgradeimg3 = document.createElement("img");
@@ -222,6 +337,7 @@
                     researchbutton.appendChild(research_icon);
                     
                     document.getElementById("research-centerarea").appendChild(researchbutton);
+                    document.getElementById("generalshop-"+ResearchList[i].class_name.toLowerCase()).setAttribute("hidden","true");
                 }
                 for(i=0;i<WorkerList.length;i++){
                     var topvh = (i*16.4).toString()+"vh";
@@ -333,13 +449,13 @@
                 }
                 localStorage.setItem("openedPreviously","true");
                 /*openInterface();*/
-                document.getElementById("website-title").innerHTML = "Pusheen Clicker"
                 document.getElementById("pusheenclicker-content").removeAttribute("hidden")
                 document.body.style.backgroundColor = "#ffb8ce";
                 pusheenCountFormatted = numberFormatter(pusheenCount);
                 document.getElementById("pusheen-count").innerHTML = pusheenCountFormatted+"<br>Pusheens";
                 document.getElementById("worker-upgrades-multiplier").setAttribute("hidden","true");
                 document.getElementById("pusheen-research").setAttribute("hidden","true");
+                document.getElementById("pusheen-doodads").setAttribute("hidden","true");
                 pusheenclickerupdaterinterval = setInterval(Updater,0.1);
                 Updater();
                 pusheenclickerworkerinterval = setInterval(RunWorkers,1000);
@@ -403,6 +519,10 @@
             }
             function pusheenClick(){
                 audioBGMusicaPlay();
+                var cuprng = getRandomInt(0,500);
+                if(cuprng==10){
+                    crystallineUnicornPusheenCount++;
+                }
                 pusheenCount= pusheenCount + (Click.power*generalMultiplier*prestigeMultiplier*unicornpusheenMultiplier*clickMultiplier);
                 pusheenCountFormatted = numberFormatter(pusheenCount);
                 document.getElementById("pusheen-count").innerHTML = pusheenCountFormatted+"<br>Pusheens";
@@ -589,6 +709,11 @@
                     document.getElementById("pusheenclicker-infowindow-cost").innerHTML = 'Cost:'+numberFormatter(workertype.cost);
                     document.getElementById("pusheenclicker-infowindow-description").innerHTML = workertype.description;
                 }
+                else if(type == 'doodads'){
+                    document.getElementById("pusheenclicker-infowindow-name").innerHTML = workertype.name;
+                    document.getElementById("pusheenclicker-infowindow-cost").innerHTML = 'Cost:'+numberFormatter(workertype.cost)+" CUPs";
+                    document.getElementById("pusheenclicker-infowindow-description").innerHTML = workertype.description;
+                }
                 else{return;}
             }
             function RunWorkers(){
@@ -639,36 +764,53 @@
                         document.getElementById("pusheen-research").removeAttribute("hidden");
                         
                     }
+                    if(WizardTower.amount>0){
+                        document.getElementById("pusheen-doodads").removeAttribute("hidden");
+                        
+                    }
                     localStorage.setItem("storage_"+WorkerList[updaterforloopvar].class_name+"_amount",WorkerList[updaterforloopvar].amount);
                     localStorage.setItem("storage_"+WorkerList[updaterforloopvar].class_name+"_hidden",WorkerList[updaterforloopvar].hidden);
-                    localStorage.setItem("storage_"+WorkerList[updaterforloopvar].class_name+"_researched",WorkerList[updaterforloopvar].researched);
+                    
                     localStorage.setItem("storage_"+WorkerList[updaterforloopvar].class_name+"_upgradeamount",WorkerList[updaterforloopvar].upgradeAmount);  
                 }
+                for(var DDD=0;DDD<DoodadsList.length;DDD++){
+                    if(DoodadsList[DDD].researched=="true"){
+                        document.getElementById("generalshop-"+DoodadsList[DDD].class_name.toLowerCase()).removeAttribute("hidden");
+                    }
+                }
                 for(yeet=0;yeet<ResearchList.length;yeet++){
+                    for(var xxx = 0; xxx<ResearchList[yeet].unlocks.length;xxx++){
+                        localStorage.setItem("storage_"+ResearchList[yeet].unlocks[xxx].class_name+"_researched",ResearchList[yeet].unlocks[xxx].researched);
+                    }
                     if(ResearchList[yeet].unlocks[0].researched=="false"){
+                        
+                        
                         if(yeet==0){
                             document.getElementById("generalshop-"+ResearchList[yeet].class_name.toLowerCase()).removeAttribute("hidden");
                         }
-                        else if(updaterforloopvar != 0 && ResearchList[yeet-1].unlocks[0].researched=="true" && ResearchList[yeet-1].unlocks[0].amount>0){
-                            document.getElementById("generalshop-"+ResearchList[yeet].class_name.toLowerCase()).removeAttribute("hidden");
-                        }
-                        else if(updaterforloopvar != 0 && (ResearchList[yeet-1].unlocks[0].researched=="false" || ResearchList[yeet-1].unlocks[0].amount==0)){
-                            document.getElementById("generalshop-"+ResearchList[yeet].class_name.toLowerCase()).setAttribute("hidden","true");
-                        }
+
                     }
                     else if(ResearchList[yeet].unlocks[0].researched=="true"){
+                        document.getElementById("generalshop-"+ResearchList[yeet].class_name.toLowerCase()).removeAttribute("hidden");
                         document.getElementById("generalshop-"+ResearchList[yeet].class_name.toLowerCase()).setAttribute("onclick","");
                         ResearchList[yeet].cost="UNLOCKED";
+                        if(ResearchList[yeet].unlocks[0].amount>0){
+                            for(var ppp = 0;ppp<ResearchList[yeet].releases.length;ppp++){
+                                document.getElementById("generalshop-"+ResearchList[yeet].releases[ppp].class_name.toLowerCase()).removeAttribute("hidden");
+                            }
+                        }
                         
                     }
                 }
                 
                 var temporarythingy = (pusheenCount.toExponential()).split("e+");
+                localStorage.setItem("storage_crystallineUnicornPusheenCount",crystallineUnicornPusheenCount);
                 localStorage.setItem("storage_pusheenCount",temporarythingy[0]);
                 localStorage.setItem("storage_pusheenCount2",temporarythingy[1]);
                 localStorage.setItem("storage_clickupgradeamount",Click.upgradeAmount);
                 pusheenCountFormatted = numberFormatter(pusheenCount);
                 document.getElementById("pusheen-count").innerHTML = pusheenCountFormatted+"<br>Pusheens";
+                document.getElementById("cup-count").innerHTML = numberFormatter(crystallineUnicornPusheenCount)+"<br>CUPs";
                 localStorage.setItem("openedPreviously","true");
             }
             function newWorker(workertype){
@@ -712,21 +854,34 @@
                         workertype.unlocks[op].researched="true";
                     }
                 }
+                else if(upgradetype=='doodads' && (crystallineUnicornPusheenCount >= workertype.cost)){
+                    if(BonusRunning=="false"){
+                        BonusRunning="true";
+                        crystallineUnicornPusheenCount = crystallineUnicornPusheenCount - workertype.cost;
+                        workertype.runThis();
+                        
+                    }else{alert("There is already a Bonus running!");}
+                    //DABEACHES
+                }
                 else{return;}
             }
             function pusheenclickerHome(){
                 document.getElementById("general-shop").setAttribute("hidden","true");
                 document.getElementById("pusheenclickercenter-credits").setAttribute("hidden","true");
                 document.getElementById("pusheenclickercenter-home").removeAttribute("hidden");
-                                document.getElementById("adoption-centerarea").setAttribute("hidden","true");
+                document.getElementById("adoption-centerarea").setAttribute("hidden","true");
                 document.getElementById("research-centerarea").setAttribute("hidden","true");
+                document.getElementById("customization-centerarea").setAttribute("hidden","true");
+                document.getElementById("doodads-centerarea").setAttribute("hidden","true");
             }
             function pusheenclickerCredits(){
                 document.getElementById("general-shop").setAttribute("hidden","true");
                 document.getElementById("pusheenclickercenter-home").setAttribute("hidden","true");
                 document.getElementById("pusheenclickercenter-credits").removeAttribute("hidden");
-                                document.getElementById("adoption-centerarea").setAttribute("hidden","true");
+                document.getElementById("adoption-centerarea").setAttribute("hidden","true");
                 document.getElementById("research-centerarea").setAttribute("hidden","true");
+                document.getElementById("customization-centerarea").setAttribute("hidden","true");
+                document.getElementById("doodads-centerarea").setAttribute("hidden","true");
             }
             function pusheenclickerShop(){
                 document.getElementById('pusheenclickercenter-credits').setAttribute('hidden',"true");
@@ -734,7 +889,18 @@
                 document.getElementById("general-shop").removeAttribute("hidden");
                 document.getElementById("adoption-centerarea").setAttribute("hidden","true");
                 document.getElementById("research-centerarea").setAttribute("hidden","true");
+                document.getElementById("customization-centerarea").setAttribute("hidden","true");
+                document.getElementById("doodads-centerarea").setAttribute("hidden","true");
                 
+            }
+            function pusheenclickerCustomization(){
+                document.getElementById("general-shop").setAttribute("hidden","true");
+                document.getElementById("pusheenclickercenter-home").setAttribute("hidden","true");
+                document.getElementById("pusheenclickercenter-credits").setAttribute("hidden","true");
+                document.getElementById("adoption-centerarea").setAttribute("hidden","true");
+                document.getElementById("research-centerarea").setAttribute("hidden","true");
+                document.getElementById("doodads-centerarea").setAttribute("hidden","true");
+                document.getElementById("customization-centerarea").removeAttribute("hidden");
             }
             function pusheenclickerAdoption(){
                 document.getElementById("general-shop").setAttribute("hidden","true");
@@ -742,6 +908,17 @@
                 document.getElementById("pusheenclickercenter-home").setAttribute("hidden","true");
                 document.getElementById("adoption-centerarea").removeAttribute("hidden");
                 document.getElementById("research-centerarea").setAttribute("hidden","true");
+                document.getElementById("customization-centerarea").setAttribute("hidden","true");
+                document.getElementById("doodads-centerarea").setAttribute("hidden","true");
+            }
+            function pusheenclickerDoodads(){
+                document.getElementById("general-shop").setAttribute("hidden","true");
+                document.getElementById("pusheenclickercenter-home").setAttribute("hidden","true");
+                document.getElementById("pusheenclickercenter-credits").setAttribute("hidden","true");
+                document.getElementById("adoption-centerarea").setAttribute("hidden","true");
+                document.getElementById("research-centerarea").setAttribute("hidden","true");
+                document.getElementById("customization-centerarea").setAttribute("hidden","true");
+                document.getElementById("doodads-centerarea").removeAttribute("hidden");
             }
             function pusheenclickerResearch(){
                 document.getElementById("general-shop").setAttribute("hidden","true");
@@ -749,6 +926,8 @@
                 document.getElementById("pusheenclickercenter-home").setAttribute("hidden","true");
                 document.getElementById("adoption-centerarea").setAttribute("hidden","true");
                 document.getElementById("research-centerarea").removeAttribute("hidden");
+                document.getElementById("customization-centerarea").setAttribute("hidden","true");
+                document.getElementById("doodads-centerarea").setAttribute("hidden","true");
             }
             function runPusheenConsole(input){
                 if(input[1]=="CONSOLE"){
@@ -763,6 +942,14 @@
                     }
                     else if(input[2]=="addpusheens"){
                         pusheenCount=pusheenCount+parseInt(input[3]);
+                    }
+                    else if(input[2]=="bulkclick"){
+                        for(var po=0;po<input[3];po++){
+                            pusheenClick();
+                        }
+                    }
+                    else if(input[2]=="addcups"){
+                        crystallineUnicornPusheenCount=crystallineUnicornPusheenCount+parseInt(input[3]);
                     }
                     else if(input[2]=="upgrade"){
                         if(input[4]=="click"){
@@ -814,8 +1001,16 @@
                     document.getElementById(WorkerList[i].class_name+"_area").setAttribute("hidden","true");
                     WorkerList[i].researched="false";
                 }
+                for(i=0;i<DoodadsList.length;i++){
+                    DoodadsList[i].researched="false";
+                }
+                clearInterval(bonusinterval);
+                clearInterval(bonustimerinterval);
+                clearInterval(unicornpusheeninterval);
+                clearInterval(unicornpusheenworkerinterval);
                 Click.upgradeAmount = 0;
                 pusheenCount=0;
+                crystallineUnicornPusheenCount=0;
                 WorkerList[0].hidden="false";
                 
                 localStorage.clear();
@@ -829,6 +1024,7 @@
                 function MusicButtonCross(){
                     document.getElementById("musica_button").setAttribute("src","Music_Button.png");
                     document.getElementById("musica_button").setAttribute("onclick","MusicButton();");
+                    document.getElementById("musica").play();
                     document.getElementById("musica").muted=false;
                 }
             //Window.Onload
@@ -893,6 +1089,13 @@
             text-align: center;
             width:30vw;
             height:5vh;
+            font-size:5vmin;
+        }
+        .corner_icon{
+            position:absolute;
+            z-index:5;
+            margin-top:12vh;
+            color:white;
             font-size:5vmin;
         }
         .pusheenclicker-header_h2_2{
@@ -966,7 +1169,8 @@
         }
         #pusheenclicker-header {
             padding: 0.75vw;
-            background: #ff9cbb;
+            /*CHRISTMAS #ff9cbb*/
+            background-color:green;
             color: white;
         }
         .pusheenclickernav-ul {
@@ -974,7 +1178,8 @@
           margin: 0;
           padding: 0;
           overflow: hidden;
-          background-color: #ff85ac;
+            /*CHRISTMAS #ff85ac*/
+          background-color:red;
             font-size:2.6vmin;
         }
 
@@ -992,7 +1197,8 @@
             user-select:none;
         }
         .pusheenclickernav-li_right a:hover {
-          background-color: #ff548b;
+            /*CHRISTMAS #ff548b*/
+          background-color: #d11f00;
         }
 
         .pusheenclickernav-li a {
@@ -1005,7 +1211,8 @@
         }
 
         .pusheenclickernav-li a:hover {
-          background-color: #ff548b;
+            /*CHRISTMAS #ff548b*/
+          background-color: #d11f00;
         }
         #falling-pusheens{
             z-index: 0;
@@ -1100,6 +1307,27 @@
             font-size:3.5vmin;
             background:rgba(255, 255, 255, 0.8);
             opacity:0.8;
+        }
+        #cup-count{
+            color:white;
+            display:block;
+            position: absolute;
+            top:25vh;
+            text-align: center;
+            left:20vw;
+            width:8vw;
+            height:9vh;
+            font-size:3.5vmin;
+            background-image:url("shop_background.png");
+            border:0.2vw solid brown;
+        }
+        #cupcount-icon{
+            position: absolute;
+            top:32.5vh;
+            left:20vw;
+            width:2vw;
+            height:4.1vh;
+            z-index:7;
         }
         #workers{
             margin-top:57.89vh;
@@ -1227,6 +1455,8 @@
         #musica_button{
             position:absolute;
             left:98%;
+            width:2vw;
+            height:4.1vh;
         }
         @keyframes pusheen-fall-anim{
             0%   {top: 0%;}
@@ -1264,14 +1494,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+    <meta name="description" content="The Pusheen Clicker! Start off with only a few Pusheens and grow into a Pusheen Empire that can travel through the stars."/>
+    <meta name="keywords" content="Pusheen, Idle, Pusheen Clicker, pusheen clicker, idle, pusheen, clicker, Clicker, Idle Clicker, idle clicker, idle pusheen clicker, Idle Pusheen Clicker, Pusheen Game, pusheen game, game, Game"/>
     <script data-ad-client="ca-pub-9835016556573506" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <title id="website-title"></title>
+  <title id="website-title">The Pusheen Clicker</title>
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="icon" href="/favicon.ico">
 </head>
     <body>
-        <audio id="musica" src="asgoretheme.mp3" autoplay loop>
+        <!--CHRISTMAS src="asgoretheme.mp3"--><audio id="musica" src="christmas_musica.mp3" autoplay loop>
         </audio> 
         <div id="secret-stuff">
             <div ondragstart="return false" id="pusheenclicker-content">
@@ -1279,7 +1510,8 @@
                     <div>
                         <div id="pusheenclicker-header">
                             <h2 class="pusheenclicker-header_h2">The Pusheen Clicker</h2>
-                            <img id="header_pusheen" width="100" height="100" src="Pusheen.png"/>
+                             <!--CHRISTMAS-->
+                            <img id="header_pusheen" width="100" height="100" src="christmas_pusheen.png"/>
                             <h2 id="BonusTypeAnnouncement" class="pusheenclicker-header_h2_2"></h2>
                             <h2 id="BonusTimer" class="pusheenclicker-header_h2_2"></h2>
                             <img id="musica_button" src="Music_Button.png" onclick="MusicButton();"/>
@@ -1287,7 +1519,9 @@
                         <ul class="pusheenclickernav-ul">
                             <li class="pusheenclickernav-li"><a id="pusheenclicker-home" class="" onclick="pusheenclickerHome();">Home</a></li>
                             <li class="pusheenclickernav-li"><a id="pusheenclicker-shop" class="" onclick="pusheenclickerShop();">Shop</a></li>
+                            <li class="pusheenclickernav-li"><a id="pusheenclicker-customization" class="" onclick="pusheenclickerCustomization();">Customization</a></li>
                             <li class="pusheenclickernav-li"><a id="pusheenclicker-adoption" class="" onclick="pusheenclickerAdoption();">Adoption</a></li>
+                            <li class="pusheenclickernav-li" id="pusheen-doodads"><a id="pusheenclicker-doodads" class="" onclick="pusheenclickerDoodads();">Doodads</a></li>
                             <li class="pusheenclickernav-li" id="pusheen-research"><a id="pusheenclicker-research" class="" onclick="pusheenclickerResearch();">Research</a></li>
                             <li class="pusheenclickernav-li"><a id="pusheenclicker-prestige" class="" onclick="pusheenclickerPrestige();">Prestige</a></li>
                             <li class="pusheenclickernav-li_right"><a id="pusheenclicker-prestige" class="text_red" onclick="pusheenclickerPROGRESSRESET1();">RESET</a></li>
@@ -1297,16 +1531,20 @@
                 </div>
                 <div id="click-area">
                     <div id="falling-pusheens">
-                        <img id="fallingpusheen1" src="Pusheen.png"/>
-                        <img id="fallingpusheen2" width="120" height="120" src="Pusheen.png"/>
-                        <img id="fallingpusheen3" src="Pusheen.png"/>
-                        <img id="fallingpusheen4" src="Pusheen.png"/>
-                        <img id="fallingpusheen5" width="130" height="130" src="Pusheen.png"/>
-                        <img id="fallingpusheen6" width="120" height="120" src="Pusheen.png"/>
+                        <!--CHRISTMAS-->
+                        <img id="fallingpusheen1" src="snowflake.png"/>
+                        <img id="fallingpusheen2" width="120" height="120" src="snowflake.png"/>
+                        <img id="fallingpusheen3" src="snowflake.png"/>
+                        <img id="fallingpusheen4" src="snowflake.png"/>
+                        <img id="fallingpusheen5" width="130" height="130" src="snowflake.png"/>
+                        <img id="fallingpusheen6" width="120" height="120" src="snowflake.png"/>
                     </div>
                     <div id="clickable-pusheen">
-                        <img onclick="pusheenClick();" id="clickablepusheen" src="Pusheen.png"/>
+                         <!--CHRISTMAS-->
+                        <img onclick="pusheenClick();" id="clickablepusheen" src="christmas_pusheen.png"/>
                         <h2 id="pusheen-count"></h2>
+                        <img id="cupcount-icon" src="CUP.png"/>
+                        <h2 id="cup-count"></h2>
                     </div>
                 </div>
                 <div id="center-area">
@@ -1359,7 +1597,7 @@
                                 Lead Animator: Michael Wang<br>
                                 <br>Marketing and Publishing:<br>
                                 Lead Marketer: Michael Wang<br>
-                                Lead Publisher: Michael Wang<br>
+                                Publisher: Github<br>
                                 <br>Completely Useless:<br>
                                 That One Unpaid Intern: Darren Xu<br>
                             </h2>
@@ -1378,8 +1616,14 @@
                                 </div>
                             </div>
                         </div>
+                        <div id="customization-centerarea">
+                            <h2 class="worker-upgrades-title">==+Pusheen Customization+==</h2>
+                        </div>
                         <div id="adoption-centerarea">
                             <h2 class="worker-upgrades-title">==+Adoption/Recruitment+==</h2>
+                        </div>
+                        <div id="doodads-centerarea">
+                            <h2 class="worker-upgrades-title">==+Magical Doodads+==</h2>
                         </div>
                         <div id="research-centerarea">
                             <h2 class="worker-upgrades-title">==+Research+==</h2>
