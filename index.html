@@ -460,20 +460,27 @@
                 Updater();
                 pusheenclickerworkerinterval = setInterval(RunWorkers,1000);
                 unicornpusheeninterval = setInterval(unicornPusheenLoop,1200000);
+                var d = new Date();
+                var n = d.getMonth();
+                if(n==11){
+                    document.getElementById("pusheenclicker-header").setAttribute("style","background-color:green;");
+                    document.getElementById("musica").setAttribute("src","christmas_musica.mp3");
+                    document.getElementById("pusheenclickernav-ul").setAttribute("style","background-color:red;");
+                    document.getElementById("clickablepusheen").setAttribute("src","christmas_pusheen.png");                
+                    
+                }
             }
             function unicornPusheenLoop(){
                 document.getElementById("header_pusheen").setAttribute("src","unicornpusheentest.png");
                 document.getElementById("header_pusheen").setAttribute("onclick","unicornPusheenOnClick();");
                 unicornpusheentimeout= setTimeout(function(){
-                    //CHRISTMAS
-                    document.getElementById("header_pusheen").setAttribute("src","christmas_pusheen.png");
+                    document.getElementById("header_pusheen").setAttribute("src","Pusheen.png");
                     document.getElementById("header_pusheen").removeAttribute("onclick");
                 },60000);
             }
             function unicornPusheenOnClick(){
                 clearTimeout(unicornpusheentimeout);
-                //CHRISTMAS
-                document.getElementById("header_pusheen").setAttribute("src","christmas_pusheen.png");
+                document.getElementById("header_pusheen").setAttribute("src","Pusheen.png");
                 document.getElementById("header_pusheen").removeAttribute("onclick");
                 if(BonusRunning=="false"){
                     BonusRunning = "true";
@@ -1171,8 +1178,7 @@
         }
         #pusheenclicker-header {
             padding: 0.75vw;
-            /*CHRISTMAS #ff9cbb*/
-            background-color:green;
+            background-color:#ff9cbb;
             color: white;
         }
         .pusheenclickernav-ul {
@@ -1180,8 +1186,7 @@
           margin: 0;
           padding: 0;
           overflow: hidden;
-            /*CHRISTMAS #ff85ac*/
-          background-color:red;
+          background-color:#ff85ac;
             font-size:2.6vmin;
         }
 
@@ -1199,8 +1204,7 @@
             user-select:none;
         }
         .pusheenclickernav-li_right a:hover {
-            /*CHRISTMAS #ff548b*/
-          background-color: #d11f00;
+          background-color: #ff548b;
         }
 
         .pusheenclickernav-li a {
@@ -1213,8 +1217,7 @@
         }
 
         .pusheenclickernav-li a:hover {
-            /*CHRISTMAS #ff548b*/
-          background-color: #d11f00;
+          background-color: #ff548b;
         }
         #falling-pusheens{
             z-index: 0;
@@ -1504,7 +1507,7 @@
     <link rel="icon" href="/favicon.ico">
 </head>
     <body>
-        <!--CHRISTMAS src="asgoretheme.mp3"--><audio id="musica" src="christmas_musica.mp3" autoplay loop>
+        <audio id="musica" src="asgoretheme.mp3" autoplay loop>
         </audio> 
         <div id="secret-stuff">
             <div ondragstart="return false" id="pusheenclicker-content">
@@ -1512,13 +1515,12 @@
                     <div>
                         <div id="pusheenclicker-header">
                             <h2 class="pusheenclicker-header_h2">The Pusheen Clicker</h2>
-                             <!--CHRISTMAS-->
-                            <img id="header_pusheen" width="100" height="100" src="christmas_pusheen.png"/>
+                            <img id="header_pusheen" width="100" height="100" src="Pusheen.png"/>
                             <h2 id="BonusTypeAnnouncement" class="pusheenclicker-header_h2_2"></h2>
                             <h2 id="BonusTimer" class="pusheenclicker-header_h2_2"></h2>
                             <img id="musica_button" src="Music_Button.png" onclick="MusicButton();"/>
                         </div>
-                        <ul class="pusheenclickernav-ul">
+                        <ul id="pusheenclickernav-ul" class="pusheenclickernav-ul">
                             <li class="pusheenclickernav-li"><a id="pusheenclicker-home" class="" onclick="pusheenclickerHome();">Home</a></li>
                             <li class="pusheenclickernav-li"><a id="pusheenclicker-shop" class="" onclick="pusheenclickerShop();">Shop</a></li>
                             <li class="pusheenclickernav-li"><a id="pusheenclicker-customization" class="" onclick="pusheenclickerCustomization();">Customization</a></li>
@@ -1533,17 +1535,15 @@
                 </div>
                 <div id="click-area">
                     <div id="falling-pusheens">
-                        <!--CHRISTMAS-->
-                        <img id="fallingpusheen1" src="snowflake.png"/>
-                        <img id="fallingpusheen2" width="120" height="120" src="snowflake.png"/>
-                        <img id="fallingpusheen3" src="snowflake.png"/>
-                        <img id="fallingpusheen4" src="snowflake.png"/>
-                        <img id="fallingpusheen5" width="130" height="130" src="snowflake.png"/>
-                        <img id="fallingpusheen6" width="120" height="120" src="snowflake.png"/>
+                        <img id="fallingpusheen1" src="Pusheen.png"/>
+                        <img id="fallingpusheen2" width="120" height="120" src="Pusheen.png"/>
+                        <img id="fallingpusheen3" src="Pusheen.png"/>
+                        <img id="fallingpusheen4" src="Pusheen.png"/>
+                        <img id="fallingpusheen5" width="130" height="130" src="Pusheen.png"/>
+                        <img id="fallingpusheen6" width="120" height="120" src="Pusheen.png"/>
                     </div>
                     <div id="clickable-pusheen">
-                         <!--CHRISTMAS-->
-                        <img onclick="pusheenClick();" id="clickablepusheen" src="christmas_pusheen.png"/>
+                        <img onclick="pusheenClick();" id="clickablepusheen" src="Pusheen.png"/>
                         <h2 id="pusheen-count"></h2>
                         <img id="cupcount-icon" src="CUP.png"/>
                         <h2 id="cup-count"></h2>
